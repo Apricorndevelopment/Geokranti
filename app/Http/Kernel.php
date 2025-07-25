@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -48,7 +49,14 @@ class Kernel extends HttpKernel
     ];
 
     protected $commands = [
-    \App\Console\Commands\CheckRewardsForAllUsers::class,
-];
+        \App\Console\Commands\CheckRewardsForAllUsers::class,
+        \App\Console\Commands\DistributePackageProfits::class,
 
+    ];
+
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('profits:distribute-monthly')
+            ->monthlyOn(1, '00:00'); // Run on 1st of every month
+    }
 }

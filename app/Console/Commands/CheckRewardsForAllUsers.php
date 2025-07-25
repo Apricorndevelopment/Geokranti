@@ -24,17 +24,15 @@ class CheckRewardsForAllUsers extends Command
     /**
      * Execute the console command.
      */
-   
-       public function handle()
-{
-    $users = \App\Models\User::all();
 
-    foreach ($users as $user) {
-        app(UserController::class)->checkAndRewardUser($user->ulid);
+    public function handle()
+    {
+        $users = \App\Models\User::all();
+
+        foreach ($users as $user) {
+            app(UserController::class)->checkAndRewardUser($user->ulid);
+        }
+
+        $this->info('Reward checking completed for all users.');
     }
-
-    $this->info('Reward checking completed for all users.');
-}
-
-    
 }

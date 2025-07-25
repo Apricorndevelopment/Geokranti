@@ -116,6 +116,11 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/profile/edit', [AdminController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/admin/profile/update', [AdminController::class, 'update'])->name('admin.profile.update');
 
+    Route::get('/profit-distribution', [AdminController::class, 'showFormForProfitDistribution'])->name('admin.profit.distribution');
+    Route::post('/profit-distribution', [AdminController::class, 'distributeYearlyProfit'])->name('admin.profit.distribute');
+    Route::get('/admin/view-yearly-distribution', [AdminController::class, 'viewYearlyDistribution'])->name('admin.view.distribution');
+    Route::get('/admin/view-monthly-distribution', [AdminController::class, 'viewMonthlyDistributions'])->name('admin.view.monthlyDistribution');
+
     Route::get('/admin/viewmember', [AdminController::class, 'viewmemeber'])->name('admin.viewmember');
     Route::get('/admin/editmember/{id}', [AdminController::class, 'editMember'])->name('admin.editmember');
     Route::put('/admin/update-member/{id}', [AdminController::class, 'updateMember'])->name('admin.updatemember');

@@ -170,13 +170,6 @@
                     </a>
                 </li>
 
-                <!-- <li class="nav-item">
-                    <a class="nav-link {{ Route::is('admin.package') ? 'active' : '' }}"
-                        href="{{ route('admin.package') }}">
-                        <i class="fa fa-suitcase menu-icon"></i>
-                        <span class="menu-title">Package Management</span>
-                    </a>
-                </li> -->
               
               
                 <!-- <li class="nav-item">
@@ -224,6 +217,26 @@
 
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#tables1" aria-expanded="false"
+                        aria-controls="tables">
+                        <i class="fa fa-suitcase menu-icon"></i>
+                        <span class="menu-title">Profit Distribution</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="tables1">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.profit.distribution') }}">Distrubute Profit
+                                    </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.view.monthlyDistribution') }}">View Monthly Profit
+                                    </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.view.distribution') }}">View Yearly Profit
+                                    </a></li>
+                        </ul>
+
+                    </div>
+                </li>
+
                 <!-- <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false"
                         aria-controls="icons">

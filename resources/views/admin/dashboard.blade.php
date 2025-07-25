@@ -1,12 +1,7 @@
 @extends('layouts.layout')
 @section('title', 'Dashboard')
 @section('container')
-    {{--
-    <h1>Welcome, Admin</h1>
-    <form method="POST" action="{{ route('admin.logout') }}">
-        @csrf
-        <button type="submit">Logout</button>
-    </form> --}}
+   
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="row">

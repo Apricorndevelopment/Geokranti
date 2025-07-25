@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Package1;
 use App\Models\Package2;
+use App\Models\Package2Purchase;
+use App\Models\PackageMonthlyDistribution;
+use App\Models\PointsTransaction;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,8 +45,8 @@ class AdminController extends Controller
         $package1Count = Package1::count();
         $package2Count = Package2::count();
         $userCount = User::count();
-        
-        return view('admin.dashboard', compact('package1Count' , 'package2Count' , 'userCount'));
+
+        return view('admin.dashboard', compact('package1Count', 'package2Count', 'userCount'));
     }
 
     public function logout(Request $request)
@@ -147,4 +151,126 @@ class AdminController extends Controller
         return redirect()->route('admin.viewmember')->with('success', 'Member deleted successfully');
     }
 
+    public function showFormForProfitDistribution()
+    {
+        $royaltyLevels = DB::table('royalty_level_rewards')
+            ->whereNotNull('profit')
+            ->orderBy('sr_no')
+            ->get();
+        return view('admin.profit-distribution', compact('royaltyLevels'));
+    }
+
+    public function distributeYearlyProfit(Request $request)
+    {
+        $validated = $request->validate([
+            'profit' => 'required|numeric|min:0',
+            'expenditure' => 'required|numeric|min:0',
+            'profit_share' => 'required|numeric|min:0|max:100', // Only for package buyers
+        ]);
+
+        // Calculate final profit
+        $finalProfit = $validated['profit'] - $validated['expenditure'];
+        $year = now()->year;
+
+        // Process royalty level rewards distribution (using their own percentages)
+        $this->distributeToRoyaltyLevels($finalProfit, $year);
+
+        // Process package buyers distribution (using form's profit_share)
+        $this->distributeToPackageBuyers($finalProfit, $validated['profit_share'], $year);
+
+        DB::table('yearly_royalty_distribution')->insert([
+            'profit' => $validated['profit'],
+            'expenditure' => $validated['expenditure'],
+            'final_profit' => $finalProfit,
+            'year' => $year,
+            'profit_share' => $validated['profit_share'],
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        return redirect()->back()->with('success', 'Profit distributed successfully!');
+    }
+
+    protected function distributeToRoyaltyLevels($finalProfit, $year)
+    {
+        $royaltyLevels = DB::table('royalty_level_rewards')
+            ->whereNotNull('profit')
+            ->orderBy('sr_no')
+            ->get();
+
+        foreach ($royaltyLevels as $levels) {
+            if (empty($levels->level) || empty($levels->profit)) {
+                continue;
+            }
+
+            // Calculate amount using level's own profit percentage
+            $levelAmount = $finalProfit * ($levels->profit / 100);
+
+            $users = User::where('current_rank', $levels->rank)->get();
+            $userCount = $users->count();
+
+            if ($userCount > 0) {
+                $perUserAmount = $levelAmount / $userCount;
+
+                foreach ($users as $user) {
+                    $user->increment('points_balance', $perUserAmount);
+
+                    PointsTransaction::create([
+                        'user_id' => $user->id,
+                        'user_ulid' => $user->ulid,
+                        'points' => $perUserAmount,
+                        'notes' => "₹$perUserAmount received for $year yearly profit as $levels->rank ($levels->profit%)",
+                        'admin_id' => Auth::id()
+                    ]);
+                }
+            }
+        }
+    }
+
+    protected function distributeToPackageBuyers($finalProfit, $profitSharePercentage, $year)
+    {
+        $packageBuyers = Package2Purchase::where('profit_share', 1)
+            ->with('user')
+            ->get()
+            ->groupBy('user_id');
+
+        $totalBuyers = $packageBuyers->count();
+
+        if ($totalBuyers > 0) {
+            $totalAmount = $finalProfit * ($profitSharePercentage / 100);
+            $perUserAmount = $totalAmount / $totalBuyers;
+
+            foreach ($packageBuyers as $user_id => $purchases) {
+                $user = $purchases->first()->user;
+
+                $user->increment('points_balance', $perUserAmount);
+
+                PointsTransaction::create([
+                    'user_id' => $user->id,
+                    'user_ulid' => $user->ulid,
+                    'points' => $perUserAmount,
+                    'notes' => "₹$perUserAmount received for $year yearly package profit share ($profitSharePercentage%)",
+                    'admin_id' => Auth::id()
+                ]);
+            }
+        }
+    }
+
+    public function viewYearlyDistribution()
+{
+    $distributions = DB::table('yearly_royalty_distribution')
+        ->orderBy('year', 'desc')
+        ->paginate(10);
+
+    return view('admin.view-yearly-distribution', compact('distributions'));
+}
+
+public function viewMonthlyDistributions()
+    {
+        $distributions = PackageMonthlyDistribution::with(['user', 'packagePurchase'])
+            ->orderBy('distribution_date', 'desc')
+            ->paginate(20);
+            
+        return view('admin.view-monthly-distribution', compact('distributions'));
+    }
 }
