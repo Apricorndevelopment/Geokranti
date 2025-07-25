@@ -30,7 +30,10 @@ class User extends Authenticatable
         'role',
         'points_balance',
         'user_doa',
-        'profile_picture'
+        'profile_picture',
+        'current_rank',
+        'left_business',
+        'right_business',
     ];
 
      public function packageTransactions()

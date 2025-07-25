@@ -83,25 +83,22 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>
-                                            <th>ULID</th>
-                                            <th>Name</th>
+                                            <th>ULID/Name</th>
                                             <th>Points</th>
                                             <th>Notes</th>
-                                            <th>Admin Name</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Sample data - replace with actual PHP loop -->
+                                       
                                         @foreach($pointsTransactions as $transaction)
                                             <tr>
                                                 <td>{{ $transaction->created_at->format('Y-m-d') }}</td>
-                                                <td>{{ optional($transaction->user)->ulid }}</td>
-                                                <td>{{ optional($transaction->user)->name }}</td>
+                                                <td>{{ optional($transaction->user)->name }} ({{ optional($transaction->user)->ulid }})</td>
+                                               
                                                 <td class="{{ $transaction->points >= 0 ? 'text-success' : 'text-danger' }}">
                                                     {{ $transaction->points >= 0 ? '+' : '' }}{{ $transaction->points }}
                                                 </td>
                                                 <td>{{ $transaction->notes ? $transaction->notes : 'N/A' }}</td>
-                                                <td>{{ optional($transaction->admin)->name }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

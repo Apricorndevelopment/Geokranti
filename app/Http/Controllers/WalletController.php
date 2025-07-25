@@ -12,25 +12,31 @@ class WalletController extends Controller
 {
 
     public function index()
-{
-    // Recent transactions for both tabs
-    $pointsTransactions = PointsTransaction::with(['user', 'admin'])
-                        ->latest()
-                        ->take(10)
-                        ->get();
+    {
+        // Recent transactions for both tabs
+        // $pointsTransactions = PointsTransaction::with(['user', 'admin'])
+        //                     ->latest()
+        //                     ->take(10)
+        //                     ->get();
 
-    $royaltyTransactions = RoyaltyTransaction::with(['user', 'admin'])
-                        ->latest()
-                        ->take(10)
-                        ->get();
+        $pointsTransactions = PointsTransaction::with(['user', 'admin'])
+            ->where('admin_id', 1)
+            ->latest()
+            ->take(10)
+            ->get();
 
-    return view('admin.viewwallet', compact('pointsTransactions', 'royaltyTransactions'));
-}
+        $royaltyTransactions = RoyaltyTransaction::with(['user', 'admin'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.viewwallet', compact('pointsTransactions', 'royaltyTransactions'));
+    }
     public function getUserByUlid(Request $request)
     {
         $user = User::where('ulid', $request->ulid)->first(['name', 'email', 'points_balance', 'royalty_balance']);
-        
-        if(!$user) {
+
+        if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'User not found'
@@ -48,29 +54,29 @@ class WalletController extends Controller
         ]);
     }
 
-   public function addPoints(Request $request)
-{
-    $request->validate([
-        'ulid' => 'required',
-        'points' => 'required|numeric',
-        'notes' => 'nullable|string'
-    ]);
+    public function addPoints(Request $request)
+    {
+        $request->validate([
+            'ulid' => 'required',
+            'points' => 'required|numeric',
+            'notes' => 'nullable|string'
+        ]);
 
-    $user = User::where('ulid', $request->ulid)->firstOrFail();
+        $user = User::where('ulid', $request->ulid)->firstOrFail();
 
-    $adminId = Auth::guard('admin')->id();
+        $adminId = Auth::guard('admin')->id();
 
-    PointsTransaction::create([
-        'user_id' => $user->id,
-        'points' => $request->points,
-        'notes' => $request->notes,
-        'admin_id' => $adminId
-    ]);
+        PointsTransaction::create([
+            'user_id' => $user->id,
+            'points' => $request->points,
+            'notes' => $request->notes,
+            'admin_id' => $adminId
+        ]);
 
-    $user->increment('points_balance', $request->points);
+        $user->increment('points_balance', $request->points);
 
-    return redirect()->back()->with('success', 'Points transaction completed successfully.');
-}
+        return redirect()->back()->with('success', 'Points transaction completed successfully.');
+    }
 
 
     public function addRoyalty(Request $request)

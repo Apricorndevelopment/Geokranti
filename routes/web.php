@@ -78,6 +78,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-packages', [PackageAssignmentController::class, 'viewUserPackage'])->name('user.packages');
     Route::get('/user/viewuser', [AuthController::class, 'showTreeRecursive'])->name('user.view');
 
+    Route::get('/user/commissions/level1', [UserController::class, 'level1Commissions'])->name('user.commissions.level1');
+    Route::get('/user/commissions/level2', [UserController::class, 'level2Commissions'])->name('user.commissions.level2');
+    Route::get('/user/reports/level-income', [UserController::class, 'levelIncomeReport'])->name('user.reports.level-income');
+
     Route::get('/get-package-rates/{packageId}', function ($packageId) {
         $rates = Package2Details::where('package2_id', $packageId)->get();
         return response()->json($rates);

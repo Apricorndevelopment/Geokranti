@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets2/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets2/js/select.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets2/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" rel="stylesheet" />
     <link rel="shortcut icon" href="{{ asset('assets2/images/favicon.png') }}" />
 </head>
@@ -23,14 +24,8 @@
 <body>
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <!-- <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-            <a class="navbar-brand brand-logo me-5 d-flex" href=""><img src="{{ asset('geokrantilogo.jpg') }}"
-                    class="me-2" alt="logo" style="width: 40px;" />
-                <h3>Piyush</h3>
-            </a>
-           
-        </div> -->
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+    
+        <div class="text-center navbar-brand-wrapper ps-0 ps-sm-1 ps-xl-2 d-flex align-items-center justify-content-start">
             <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="">
                 <img src="{{ asset('geokrantilogo.jpg') }}" alt="logo"
                     style="width: 55px; height: 55px; object-fit: cover;" class="me-2" />
@@ -150,7 +145,7 @@
                 <li class="nav-item">
                     <a class="nav-link " href="{{ route('user.view') }}">
                         <i class="fa fa-sitemap menu-icon"></i>
-                        <span class="menu-title">User Tree</span>
+                        <span class="menu-title">Network Explorer</span>
                     </a>
                 </li>
 
@@ -163,25 +158,51 @@
 
                 <li class="nav-item">
                     <a class="nav-link " href="{{ route('package2.purchase') }}">
-                        <i class="fa fa-money menu-icon"></i>
-                        <span class="menu-title">Package Purchase</span>
+                        <i class="fas fa-cubes menu-icon"></i>
+                        <span class="menu-title">Purchase Package</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link " href="{{ route('user.packages') }}">
-                        <i class="fa fa-money menu-icon"></i>
+                        <i class="fas fa-box-open menu-icon"></i>
                         <span class="menu-title">My Packages</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="../Geokranti.com.pdf" download>
-                        <i class="fa fa-download menu-icon"></i>
-                        <span class="menu-title">Download Pdf</span>
+                    <a class="nav-link" data-bs-toggle="collapse" href="#tables1" aria-expanded="false"
+                        aria-controls="tables">
+                        <i class="fa fa-suitcase menu-icon"></i>
+                        <span class="menu-title">Incentives</span>
+                        <i class="menu-arrow"></i>
                     </a>
+                    <div class="collapse" id="tables1">
+                        <ul class="nav flex-column sub-menu" style="list-style: none;">
+                            <li class="nav-item"><a class="nav-link" href="{{ route('user.commissions.level1') }}">Direct Commissions</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('user.commissions.level2') }}">Network Bonus</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('user.reports.level-income') }}">Level Income</a></li>
+                        </ul>
+                    </div>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#tables2" aria-expanded="false"
+                        aria-controls="tables">
+                         <i class="fa fa-download menu-icon"></i>
+                        <span class="menu-title">Download Pdf</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="tables2">
+                        <ul class="nav flex-column sub-menu" style="list-style: none;">
+                            <li class="nav-item"> <a class="nav-link" href="/English-Geokranti.com.pdf" download>In English
+                                    </a></li>
+                        <li class="nav-item"> <a class="nav-link" href="/Hindi-Geokranti.com.pdf" download>In Hindi
+                                    </a></li>
+                        </ul>
+
+                    </div>
+                </li>
             </ul>
         </nav>
 

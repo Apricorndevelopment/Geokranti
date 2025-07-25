@@ -13,7 +13,8 @@ class PointsTransaction extends Model
         'user_id',
         'points',
         'notes',
-        'admin_id'
+        'admin_id',
+        'user_ulid'
     ];
 
     public function user()

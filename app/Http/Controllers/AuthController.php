@@ -85,8 +85,6 @@ class AuthController extends Controller
             'password.regex' => 'Please use a strong password with at least one special character.',
         ]);
 
-
-
         $customUlid = 'AH' . rand(100000, 999999);
 
         while (User::where('ulid', $customUlid)->exists()) {
@@ -173,7 +171,6 @@ class AuthController extends Controller
                 return back()->with('error', 'Login details are wrong.');
             }
         }
-
 
         // Check if input is email or ULID
         $fieldType = filter_var($email, FILTER_VALIDATE_EMAIL) ? 'email' : 'ulid';
@@ -366,13 +363,13 @@ class AuthController extends Controller
             'profile_picture' => $user->profile_picture,
             'user_doa' => $user->user_doa,
             'state' => $user->state,
+            'rank' => $user->current_rank,
             'phone' => $user->phone,
             'status' => $user->status,
             'points_balance' => $user->points_balance,
             'royalty_balance' => $user->royalty_balance,
         ]);
     }
-
 
 
     // for Admin Tree

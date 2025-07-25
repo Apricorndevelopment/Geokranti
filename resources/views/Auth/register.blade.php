@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,347 +13,418 @@
 
     <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-hover: #4f46e5;
-            --gradient: linear-gradient(135deg, #f43f5e 0%, #a855f7 50%, #6366f1 100%);
+            --primary-green: #2e7d32;
+            --dark-green: #1b5e20;
+            --light-green: #81c784;
+            --earth-brown: #5d4037;
+            --sky-blue: #0288d1;
+            --gradient: linear-gradient(135deg, var(--primary-green) 0%, var(--sky-blue) 100%);
         }
 
         body {
-            background: url('images/bg-01.jpg') no-repeat center center fixed;
+            background: url('/logoimg.png') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .auth-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            background: rgba(198, 198, 198, 0.578);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
         }
 
         .logo {
             width: 80px;
             height: 80px;
-            margin: 0 auto 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            color: white;
-            font-size: 1.8rem;
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
         }
 
-        .box-main {
-            max-width: 450px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2rem;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .logo img {
+            width: 100px;
+            height: auto;
         }
 
-        #header {
+        .brand-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-header {
             text-align: center;
-            margin-bottom: .5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-header h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
             background: var(--gradient);
             border-radius: 30px;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 1.8rem;
             padding: 10px 0;
-            color: #fef9ff;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .input-group {
+        .text-muted {
+            color: #6b7280;
             margin-bottom: 1rem;
         }
 
-        .input-group-text {
-            background-color: #fff;
-            border-right: none;
-            border-radius: 12px 0 0 12px !important;
-        }
-
         .form-control {
-            padding: 10px;
-            border-radius: 0 12px 12px 0 !important;
-            border-left: none;
-            background: rgba(255, 255, 255, 0.8);
-            transition: all 0.3s;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
-            outline: none;
-            border-color: #e2e8f0;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
         }
 
-        #sendData {
+        .input-group-text {
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.611);
+            border-right: none;
+            color: var(--primary-green);
+        }
+
+        .input-group .form-control {
+            background-color: rgba(255, 255, 255, 0.611);
+            border-left: none;
+        }
+
+        .btn-auth {
             background: var(--gradient);
-            color: #fef9ff;
-            width: 100%;
-            padding: 10px;
-            border: none;
+            color: white;
+            padding: 12px;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 1.3rem;
+            width: 100%;
             margin-top: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        #sendData:hover {
+        .btn-auth:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
         }
 
-        .message {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
+        .btn-auth:active {
+            transform: translateY(0);
         }
 
-        .message a {
-            color: var(--primary-color);
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            color: var(--primary-green);
+            z-index: 5;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+        a {
+            color: var(--primary-green);
             text-decoration: none;
-            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        .message a:hover {
+        a:hover {
+            color: var(--dark-green);
             text-decoration: underline;
+        }
+
+        .alert {
+            border-radius: 12px;
         }
 
         .privacy-policy {
             margin: 1.5rem 0;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            border-left: 3px solid var(--primary-color);
-        }
-
-        .radio-inline {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .radio-inline span {
-            color: #333;
-        }
-
-        .option-input {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary-color);
-            cursor: pointer;
-        }
-
-        .form-control::placeholder {
-            color: black;
-            opacity: 0.4;
+            border-left: 3px solid var(--primary-green);
         }
 
         @media (max-width: 576px) {
-            .box-main {
+            .auth-container {
                 padding: 1.5rem;
+                margin: 1rem auto;
             }
 
-            #header {
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .brand-name {
                 font-size: 1.8rem;
+            }
+
+            .auth-header h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="box-main">
-        <form action="{{ route('register') }}" method="POST" id="newProfile">
-            @csrf
-            <div class="logo">
-                <img src="geokrantilogo-removebg.png" alt="" width="120px" height="120px">
-            </div>
-            <h1 id="header">Create an Account</h1>
-            <p>Lets get started with a free account it's easy. Please fill up your details below</p>
-
-            <!-- Full Name -->
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-user" style="color: #3699fc"></i></span>
-                <input type="text" name="full_name" class="form-control" placeholder="Full Name"
-                    value="{{ old('full_name') }}" required>
-                @error('full_name')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="geokrantilogo-removebg.png" alt="Geokranti Logo">
+                    </div>
+                    <div class="brand-name">Geokranti</div>
+                </div>
+                <h1>Create Account</h1>
+                <p class="text-muted">Join us today. Fill in your details to get started.</p>
             </div>
 
-            <!-- Sponsor ID (Optional) -->
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-            <div class="input-group position-relative">
-                <span class="input-group-text"><i class="fas fa-user-tag" style="color: #3699fc"></i></span>
-                <input type="text" name="sponsor_id" id="sponsor_id" class="form-control" placeholder="Sponsor ID"
-                    required value="{{ old('sponsor_id') }}">
-                <span id="sponsor-status" style="position: absolute; right: 10px; top: 10px;"></span>
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
+
+                <!-- Full Name -->
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" name="full_name" class="form-control" placeholder="Full Name" required>
+                    </div>
+                </div>
+
+                <!-- Sponsor ID -->
+                <div class="mb-3 position-relative">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                        <input type="text" name="sponsor_id" id="sponsor_id" class="form-control"
+                            placeholder="Sponsor ID" required>
+                    </div>
+                    <small id="sponsor-message" class="text-muted"></small>
+                </div>
+
+                <!-- Parent ID (Optional) -->
+                <div class="mb-3 position-relative">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                        <input type="text" name="parent_id" id="parent_id" class="form-control"
+                            placeholder="Parent ID (optional)">
+                    </div>
+                    <small id="parent-message" class="text-muted"></small>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3 position-relative">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password" id="password" class="form-control"
+                            placeholder="Password" required>
+                    </div>
+                    <i class="fas fa-eye toggle-password" toggle="#password"></i>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-3 position-relative">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password_confirmation" id="password_confirmation"
+                            class="form-control" placeholder="Confirm Password" required>
+                    </div>
+                    <i class="fas fa-eye toggle-password" toggle="#password_confirmation"></i>
+                </div>
+
+                <!-- Privacy Policy -->
+                <div class="privacy-policy mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="privacy_policy" name="privacy_policy"
+                            required>
+                        <label class="form-check-label" for="privacy_policy">
+                            I agree to the Privacy Policy and Terms of Service
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-auth">
+                    <i class="fas fa-user-plus me-2"></i> Register
+                </button>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted">Already have an account? <a href="{{ route('auth.login') }}">Login</a></p>
+                </div>
+                <p class="text-center text-muted">आओ साथ मिलकर प्राकृतिक खेती से जूडें ।</p>
+            </form>
+        </div>
+
+
+
+        <div id="oldProfile">
+            <!-- =============================================================== -->
+            <form action="index.html" method="post" id="oldList">
+                <h1>Login to Your Profile </h1>
+                <h1></h1>
+                <!-- USER NAME -->
+                <div class="float-label">
+                    <input type="text" name="" value="" placeholder="Username" id="oldName">
+                </div>
+                <br>
+
+                <!-- PASSWORD -->
+                <div class="float-label">
+                    <input type="text" name="" value="" placeholder="Password" id="oldPwd">
+                </div>
+
+                <button type="button" name="button" id="sendData2">Login</button>
+                <p></p>
+
+                <!-- Create profile for unregistered users -->
+                <p class="message"> Not registered? <button type="button" name="button"
+                        id="create">&nbsp;Create an
+                        account</button> </p>
+
+            </form>
+        </div>
+
+        <!-- Display User Profile  -->
+        <!-- =============================================================== -->
+        <div id="updateProfile" class="row">
+
+            <!-- Update Name -->
+            <div class="col-md-4 user-left">
+                <span><img src="https://github.com/rjoyce6/HW12-Profile/blob/master/img/girl.jpg?raw=true"
+                        alt="user image" class="user-image" id="updateImage"></span>
+                <h1 id="updateName"></h1>
+                <p id="updateAge"></p>
             </div>
-            @error('sponsor_id')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-            <small id="sponsor-message" style="color: gray;"></small>
 
-            <!-- parent id -->
-            <div class="input-group position-relative">
-                <span class="input-group-text"><i class="fas fa-user-tag" style="color: #3699fc"></i></span>
-                <input type="text" name="parent_id" id="parent_id" class="form-control"
-                    placeholder="Parent ID(optional)" required value="{{ old('parent_id') }}">
-                <span id="parent-status" style="position: absolute; right: 10px; top: 10px;"></span>
-            </div>
-            @error('parent_id')
-                <span class="text-danger">{{ $message }}</span>
-            @enderror
-            <small id="parent-message" style="color: gray;"></small>
-
-            <!-- Email -->
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-envelope" style="color: #3699fc"></i></span>
-                <input type="email" name="email" id="email" class="form-control" placeholder="Email Address"
-                    required value="{{ old('email') }}">
-                @error('email')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
-
-
-
-            <!-- Phone -->
-            <div class="input-group">
-                <span class="input-group-text"><i class="fas fa-phone" style="color: #3699fc"></i></span>
-                <input type="text" name="phone" class="form-control" placeholder="Phone Number" required
-                    value="{{ old('phone') }}">
-                @error('phone')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
+            <!-- Update Other information -->
+            <div class="col-md-8 user-right">
+                <h2>Profile <span>Info</span></h2>
+                <div class="user-info">
+                    <table>
+                        <tr>
+                            <td>
+                                <p>email address : </p>
+                            </td>
+                            <td>
+                                <p id="updateEmail"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>gender :</p>
+                            </td>
+                            <td>
+                                <p id="updateGender"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>birthday: </p>
+                            </td>
+                            <td>
+                                <p id="updateBirth"></p>
+                            </td>
+                        </tr>
 
 
-            <div class="input-group position-relative">
-                <span class="input-group-text"><i class="fas fa-lock" style="color: #3699fc"></i></span>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Password"
-                    required>
-                <i class="fas fa-eye toggle-password" toggle="#password"
-                    style="position: absolute; right: 15px; top: 10px; cursor: pointer; color: #3699fc;"></i>
-                @error('password')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
-
-
-
-            <div class="input-group position-relative">
-                <span class="input-group-text"><i class="fas fa-lock" style="color: #3699fc"></i></span>
-                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
-                    placeholder="Confirm Password" required>
-                <i class="fas fa-eye toggle-password" toggle="#password_confirmation"
-                    style="position: absolute; right: 15px; top: 10px; cursor: pointer; color: #3699fc;"></i>
-            </div>
-
-            <div class="privacy-policy">
-                <div class="form-check">
-                    <input type="checkbox" name="privacy_policy" id="privacy_policy" class="form-check-input"
-                        required>
-                    <label class="form-check-label" for="privacy_policy">
-                        I agree to the Privacy Policy and Terms of Service
-                    </label>
+                    </table>
                 </div>
             </div>
-
-            <button type="submit" id="sendData"
-                onclick="return confirm('Are you sure you want to register this user ?')">Sign Up</button>
-
-            <p class="message">Already registered?
-                <a href="{{ route('auth.login') }}">Sign In</a>
-            </p>
-            <p class="text-center">आओ साथ मिलकर प्रकृति खेती से जूडें ।</p>
-        </form>
-    </div>
-
-
-
-    <div id="oldProfile">
-        <!-- =============================================================== -->
-        <form action="index.html" method="post" id="oldList">
-            <h1>Login to Your Profile </h1>
-            <h1></h1>
-            <!-- USER NAME -->
-            <div class="float-label">
-                <input type="text" name="" value="" placeholder="Username" id="oldName">
-            </div>
             <br>
+            <button type="button" name="button" id="signOut">&nbsp;Sign out</button> </p>
 
-            <!-- PASSWORD -->
-            <div class="float-label">
-                <input type="text" name="" value="" placeholder="Password" id="oldPwd">
-            </div>
-
-            <button type="button" name="button" id="sendData2">Login</button>
-            <p></p>
-
-            <!-- Create profile for unregistered users -->
-            <p class="message"> Not registered? <button type="button" name="button" id="create">&nbsp;Create an
-                    account</button> </p>
-
-        </form>
-    </div>
-
-    <!-- Display User Profile  -->
-    <!-- =============================================================== -->
-    <div id="updateProfile" class="row">
-
-        <!-- Update Name -->
-        <div class="col-md-4 user-left">
-            <span><img src="https://github.com/rjoyce6/HW12-Profile/blob/master/img/girl.jpg?raw=true"
-                    alt="user image" class="user-image" id="updateImage"></span>
-            <h1 id="updateName"></h1>
-            <p id="updateAge"></p>
         </div>
-
-        <!-- Update Other information -->
-        <div class="col-md-8 user-right">
-            <h2>Profile <span>Info</span></h2>
-            <div class="user-info">
-                <table>
-                    <tr>
-                        <td>
-                            <p>email address : </p>
-                        </td>
-                        <td>
-                            <p id="updateEmail"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>gender :</p>
-                        </td>
-                        <td>
-                            <p id="updateGender"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>birthday: </p>
-                        </td>
-                        <td>
-                            <p id="updateBirth"></p>
-                        </td>
-                    </tr>
-
-
-                </table>
-            </div>
-        </div>
-        <br>
-        <button type="button" name="button" id="signOut">&nbsp;Sign out</button> </p>
-
-    </div>
     </div>
     </div>
 

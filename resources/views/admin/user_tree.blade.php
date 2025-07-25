@@ -1,14 +1,3 @@
-<!-- @extends('layouts.layout')
-@section('title', 'Dashboard')
-@section('container')
-    <div class="container mt-4">
-        <h2>User Tree for: {{ $admin->name }}</h2>
-        <pre style="background: #f9f9f9; padding: 10px; font-family: monospace; white-space: pre-wrap;">
-            {{ $treeText }}
-        </pre>
-    </div>
-@endsection -->
-
 @extends('layouts.layout')
 @section('title', 'User Tree')
 

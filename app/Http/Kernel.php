@@ -46,4 +46,9 @@ class Kernel extends HttpKernel
         'no.cache' => \App\Http\Middleware\NoCache::class,
         'password.age' => \App\Http\Middleware\PasswordAgeCheck::class,
     ];
+
+    protected $commands = [
+    \App\Console\Commands\CheckRewardsForAllUsers::class,
+];
+
 }
