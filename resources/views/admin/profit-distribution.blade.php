@@ -5,6 +5,12 @@
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-lg-8 mx-auto">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <!-- Profit Distribution Card -->
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-primary text-white py-3">

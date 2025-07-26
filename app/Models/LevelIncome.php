@@ -18,7 +18,9 @@ class LevelIncome extends Model
         'percentage',
         'amount',
         'package_id',
-        'package_name'
+        'package_name',
+        'distribution_date',
+        'months_remaining',
     ];
     
     public function user()

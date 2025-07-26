@@ -16,6 +16,7 @@ use App\Models\PackageTransaction;
 use App\Models\PointsTransaction;
 use App\Models\RoyaltyTransaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -121,8 +122,10 @@ class UserController extends Controller
             'address' => 'nullable|string|max:500',
             'state' => 'nullable|string|max:100',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-
-            // Password validation rules with special character check
+            'account_no' => 'nullable|string|min:6|max:100',
+            'ifsc_code' => 'nullable|string|min:4|max:100',
+            'upi_id' => 'nullable|string|max:100',
+            'passbook_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'current_password' => 'nullable|required_with:password|string|min:8',
             'password' => [
                 'nullable',
@@ -130,18 +133,23 @@ class UserController extends Controller
                 'min:8',
                 'confirmed',
                 'different:current_password',
-                'regex:/[!@#$%^&*(),.?":{}|<>]/', // ✅ Special character check
+                'regex:/[!@#$%^&*(),.?":{}|<>]/',
             ],
         ], [
             'password.regex' => 'Password must contain at least one special character.',
         ]);
 
         // Update basic fields
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->phone = $validated['phone'];
-        $user->address = $validated['address'];
-        $user->state = $validated['state'];
+        $user->fill([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'state' => $validated['state'],
+            'account_no' => $validated['account_no'],
+            'ifsc_code' => $validated['ifsc_code'],
+            'upi_id' => $validated['upi_id'],
+        ]);
 
         // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
@@ -150,6 +158,15 @@ class UserController extends Controller
             }
             $path = $request->file('profile_picture')->store('profile-pictures', 'public');
             $user->profile_picture = $path;
+        }
+
+        // Handle passbook photo upload
+        if ($request->hasFile('passbook_photo')) {
+            if ($user->passbook_photo) {
+                Storage::delete('public/' . $user->passbook_photo);
+            }
+            $path = $request->file('passbook_photo')->store('passbook-photos', 'public');
+            $user->passbook_photo = $path;
         }
 
         // Handle password change
@@ -292,8 +309,9 @@ class UserController extends Controller
 
             // Process sponsor commissions
             $this->processSponsorCommissions($user, $finalPrice, $package);
-            // Process level income distribution
-            $this->processLevelIncome($user, $finalPrice, $package);
+    
+            // $this->processLevelIncome($user, $finalPrice, $package);
+
             // For calculating the rank of the user based on the total business volume
             $this->checkAndRewardUser($user->sponsor_id);
 
@@ -399,161 +417,86 @@ class UserController extends Controller
         }
     }
 
-    //Level Income distribution
-   protected function processLevelIncome($user, $amount, $package)
-{
-    $currentLevel = 1;
-    $currentUser = $user;
+    // protected function processLevelIncome($user, $amount, $package)
+    // {
+    //     $currentLevel = 1;
+    //     $currentUser = $user;
 
-    $levelConfigs = collect([
-        ['level' => 1, 'percentage' => 10.00, 'required_rank' => null],
-        ['level_range' => '2-10', 'percentage' => 5.00, 'required_rank' => 'Farmer'],
-        ['level_range' => '11-15', 'percentage' => 3.00, 'required_rank' => 'Silver Farmer'],
-        ['level_range' => '16-20', 'percentage' => 1.00, 'required_rank' => 'Gold Farmer'],
-        ['level_range' => '21-25', 'percentage' => 0.50, 'required_rank' => 'Platinum Farmer'],
-        ['level_range' => '26-30', 'percentage' => 0.25, 'required_rank' => 'Ruby Farmer'],
-        ['level_range' => '31-35', 'percentage' => 0.25, 'required_rank' => 'Sapphire Farmer'],
-        ['level_range' => '36-40', 'percentage' => 0.25, 'required_rank' => 'Diamond Farmer'],
-        ['level_range' => '41-45', 'percentage' => 0.25, 'required_rank' => 'Blue Diamond Farmer'],
-        ['level_range' => '46-50', 'percentage' => 0.25, 'required_rank' => 'Black Diamond Farmer'],
-    ]);
+    //     while ($currentUser->sponsor_id && $currentLevel <= 50) {
+    //         $sponsor = User::where('ulid', $currentUser->sponsor_id)->first();
+    //         if (!$sponsor) break;
 
-    while ($currentUser->sponsor_id && $currentLevel <= 50) {
-        $sponsor = User::where('ulid', $currentUser->sponsor_id)->first();
-        if (!$sponsor) break;
+    //         // Determine percentage and rank requirement based on level
+    //         $percentage = 0;
+    //         $eligible = true; // Default to eligible
 
-        // Determine percentage and required rank based on level
-        $percentage = 0;
-        $eligible = false;
-        $requiredRank = null;
+    //         if ($currentLevel == 1) {
+    //             $percentage = 10.00;
+    //             // No rank requirement for level 1
+    //         }
+    //         elseif ($currentLevel >= 2 && $currentLevel <= 10) {
+    //             $percentage = 5.00;
+    //             $eligible = ($sponsor->current_rank == 'Farmer');
+    //         }
+    //         elseif ($currentLevel >= 11 && $currentLevel <= 15) {
+    //             $percentage = 3.00;
+    //             $eligible = ($sponsor->current_rank == 'Silver Farmer');
+    //         }
+    //         elseif ($currentLevel >= 16 && $currentLevel <= 20) {
+    //             $percentage = 1.00;
+    //             $eligible = ($sponsor->current_rank == 'Gold Farmer');
+    //         }
+    //         elseif ($currentLevel >= 21 && $currentLevel <= 25) {
+    //             $percentage = 0.50;
+    //             $eligible = ($sponsor->current_rank == 'Platinum Farmer');
+    //         }
+    //         elseif ($currentLevel >= 26 && $currentLevel <= 30) {
+    //             $percentage = 0.25;
+    //             $eligible = ($sponsor->current_rank == 'Ruby Farmer');
+    //         }
+    //         elseif ($currentLevel >= 31 && $currentLevel <= 35) {
+    //             $percentage = 0.25;
+    //             $eligible = ($sponsor->current_rank == 'Sapphire Farmer');
+    //         }
+    //         elseif ($currentLevel >= 36 && $currentLevel <= 40) {
+    //             $percentage = 0.25;
+    //             $eligible = ($sponsor->current_rank == 'Diamond Farmer');
+    //         }
+    //         elseif ($currentLevel >= 41 && $currentLevel <= 45) {
+    //             $percentage = 0.25;
+    //             $eligible = ($sponsor->current_rank == 'Blue Diamond Farmer');
+    //         }
+    //         elseif ($currentLevel >= 46 && $currentLevel <= 50) {
+    //             $percentage = 0.25;
+    //             $eligible = ($sponsor->current_rank == 'Black Diamond Farmer');
+    //         }
 
-        foreach ($levelConfigs as $config) {
-            if (isset($config['level']) && $currentLevel == $config['level']) {
-                $percentage = $config['percentage'];
-                $requiredRank = $config['required_rank'];
-                break;
-            } elseif (isset($config['level_range'])) {
-                list($min, $max) = explode('-', $config['level_range']);
-                if ($currentLevel >= $min && $currentLevel <= $max) {
-                    $percentage = $config['percentage'];
-                    $requiredRank = $config['required_rank'];
-                    break;
-                }
-            }
-        }
+    //         if ($percentage > 0 && $eligible) {
+    //             $incomeAmount = $amount * ($percentage / 100);
 
-        // Check if sponsor meets rank requirement
-        if ($requiredRank === null || $sponsor->current_rank === $requiredRank) {
-            $eligible = true;
-        }
+    //             // Add to user's balance
+    //             $sponsor->increment('points_balance', $incomeAmount);
 
-        if ($percentage > 0 && $eligible) {
-            $incomeAmount = $amount * ($percentage / 100);
+    //             // Record in level income table
+    //             LevelIncome::create([
+    //                 'user_id' => $sponsor->id,
+    //                 'user_ulid' => $sponsor->ulid,
+    //                 'from_user_id' => $user->id,
+    //                 'from_user_ulid' => $user->ulid,
+    //                 'from_user_name' => $user->name,
+    //                 'purchase_amount' => $amount,
+    //                 'level' => $currentLevel,
+    //                 'percentage' => $percentage,
+    //                 'amount' => $incomeAmount,
+    //                 'package_id' => $package->id ?? null,
+    //                 'package_name' => $package->package_name ?? null,
+    //             ]);
+    //         }
 
-            // Add to user's balance
-            $sponsor->increment('points_balance', $incomeAmount);
-
-            // Record in level income table
-            LevelIncome::create([
-                'user_id' => $sponsor->id,
-                'user_ulid' => $sponsor->ulid,
-                'from_user_id' => $user->id,
-                'from_user_ulid' => $user->ulid,
-                'from_user_name' => $user->name,
-                'purchase_amount' => $amount,
-                'level' => $currentLevel,
-                'percentage' => $percentage,
-                'amount' => $incomeAmount,
-                'package_id' => $package->id ?? null,
-                'package_name' => $package->package_name ?? null,
-            ]);
-        }
-
-        $currentUser = $sponsor;
-        $currentLevel++;
-    }
-}
-
-// protected function processLevelIncome($user, $amount, $package)
-// {
-//     $currentLevel = 1;
-//     $currentUser = $user;
-    
-//     while ($currentUser->sponsor_id && $currentLevel <= 50) {
-//         $sponsor = User::where('ulid', $currentUser->sponsor_id)->first();
-//         if (!$sponsor) break;
-
-//         // Determine percentage and rank requirement based on level
-//         $percentage = 0;
-//         $eligible = true; // Default to eligible
-        
-//         if ($currentLevel == 1) {
-//             $percentage = 10.00;
-//             // No rank requirement for level 1
-//         }
-//         elseif ($currentLevel >= 2 && $currentLevel <= 10) {
-//             $percentage = 5.00;
-//             $eligible = ($sponsor->current_rank == 'Farmer');
-//         }
-//         elseif ($currentLevel >= 11 && $currentLevel <= 15) {
-//             $percentage = 3.00;
-//             $eligible = ($sponsor->current_rank == 'Silver Farmer');
-//         }
-//         elseif ($currentLevel >= 16 && $currentLevel <= 20) {
-//             $percentage = 1.00;
-//             $eligible = ($sponsor->current_rank == 'Gold Farmer');
-//         }
-//         elseif ($currentLevel >= 21 && $currentLevel <= 25) {
-//             $percentage = 0.50;
-//             $eligible = ($sponsor->current_rank == 'Platinum Farmer');
-//         }
-//         elseif ($currentLevel >= 26 && $currentLevel <= 30) {
-//             $percentage = 0.25;
-//             $eligible = ($sponsor->current_rank == 'Ruby Farmer');
-//         }
-//         elseif ($currentLevel >= 31 && $currentLevel <= 35) {
-//             $percentage = 0.25;
-//             $eligible = ($sponsor->current_rank == 'Sapphire Farmer');
-//         }
-//         elseif ($currentLevel >= 36 && $currentLevel <= 40) {
-//             $percentage = 0.25;
-//             $eligible = ($sponsor->current_rank == 'Diamond Farmer');
-//         }
-//         elseif ($currentLevel >= 41 && $currentLevel <= 45) {
-//             $percentage = 0.25;
-//             $eligible = ($sponsor->current_rank == 'Blue Diamond Farmer');
-//         }
-//         elseif ($currentLevel >= 46 && $currentLevel <= 50) {
-//             $percentage = 0.25;
-//             $eligible = ($sponsor->current_rank == 'Black Diamond Farmer');
-//         }
-
-//         if ($percentage > 0 && $eligible) {
-//             $incomeAmount = $amount * ($percentage / 100);
-
-//             // Add to user's balance
-//             $sponsor->increment('points_balance', $incomeAmount);
-
-//             // Record in level income table
-//             LevelIncome::create([
-//                 'user_id' => $sponsor->id,
-//                 'user_ulid' => $sponsor->ulid,
-//                 'from_user_id' => $user->id,
-//                 'from_user_ulid' => $user->ulid,
-//                 'from_user_name' => $user->name,
-//                 'purchase_amount' => $amount,
-//                 'level' => $currentLevel,
-//                 'percentage' => $percentage,
-//                 'amount' => $incomeAmount,
-//                 'package_id' => $package->id ?? null,
-//                 'package_name' => $package->package_name ?? null,
-//             ]);
-//         }
-
-//         $currentUser = $sponsor;
-//         $currentLevel++;
-//     }
-// }
+    //         $currentUser = $sponsor;
+    //         $currentLevel++;
+    //     }
+    // }
 
 
     //Calculating the rank of the user based on the total business volume
@@ -609,22 +552,30 @@ class UserController extends Controller
         // ];
         // dd($directLegs->count(), $matchingBusiness, $weakerLegsBusiness, $strongLegBusiness, $userUlid);
         $rewards = DB::table('royalty_level_rewards')
-            ->get()
-            ->sortBy(function ($reward) {
-                return $this->convertMatchingToNumber($reward->matching);
-            });
+            ->orderBy('sr_no')
+            ->get();
 
         $user = User::where('ulid', $userUlid)->first();
 
+        $givenRewards = PointsTransaction::where('user_id', $user->id)
+            ->where('notes', 'like', 'Rank Reward:%')
+            ->pluck('notes')
+            ->map(function ($note) {
+                return trim(str_replace('Rank Reward:', '', $note));
+            })
+            ->toArray();
+
         foreach ($rewards as $reward) {
-            $requiredBusiness = $this->convertMatchingToNumber($reward->matching); // 2.5L -> 250000
-            if ($matchingBusiness >= $requiredBusiness && $strongLegBusiness >= $requiredBusiness) {
-                if ($user->current_rank == $reward->level) {
-                    continue; // Already rewarded, skip
-                }
-                // dd($requiredBusiness, $matchingBusiness, $strongLegBusiness, $user->current_rank, $reward->level);
+            $requiredBusiness = $this->convertMatchingToNumber($reward->matching);
+            // Check if user qualifies and hasn't received this reward yet
+            if (
+                $matchingBusiness >= $requiredBusiness &&
+                $strongLegBusiness >= $requiredBusiness &&
+                !in_array($reward->level, $givenRewards)
+            ) {
+
+                // Award this rank
                 $user->update(['current_rank' => $reward->level]);
-                // $user->update
 
                 PointsTransaction::create([
                     'user_id' => $user->id,
@@ -635,7 +586,9 @@ class UserController extends Controller
                 ]);
 
                 $user->increment('points_balance', $this->convertMatchingToNumber($reward->reward));
-                break; // Stop after giving one reward
+
+                // Add to given rewards to prevent duplicate awards
+                $givenRewards[] = $reward->level;
             }
         }
     }

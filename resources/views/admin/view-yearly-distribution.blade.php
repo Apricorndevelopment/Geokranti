@@ -26,7 +26,7 @@
                             <td class="text-center">₹{{ number_format($dist->profit, 2) }}</td>
                             <td class="text-center">₹{{ number_format($dist->expenditure, 2) }}</td>
                             <td class="text-center">₹{{ number_format($dist->final_profit, 2) }}</td>
-                            <td class="text-center">{{ created_at }} </td>
+                            <td class="text-center">{{ $dist->created_at }} </td>
                         </tr>
                         @empty
                         <tr>

@@ -32,11 +32,15 @@ class User extends Authenticatable
         'user_doa',
         'profile_picture',
         'current_rank',
+        'account_no',
+        'ifsc_code',
+        'upi_id',
+        'passbook_photo',
         'left_business',
         'right_business',
     ];
 
-     public function packageTransactions()
+    public function packageTransactions()
     {
         return $this->hasMany(PackageTransaction::class);
     }

@@ -206,7 +206,7 @@ class AdminController extends Controller
             // Calculate amount using level's own profit percentage
             $levelAmount = $finalProfit * ($levels->profit / 100);
 
-            $users = User::where('current_rank', $levels->rank)->get();
+            $users = User::where('current_rank', $levels->level)->get();
             $userCount = $users->count();
 
             if ($userCount > 0) {
@@ -219,7 +219,7 @@ class AdminController extends Controller
                         'user_id' => $user->id,
                         'user_ulid' => $user->ulid,
                         'points' => $perUserAmount,
-                        'notes' => "₹$perUserAmount received for $year yearly profit as $levels->rank ($levels->profit%)",
+                        'notes' => "₹$perUserAmount received for $year yearly profit as $levels->level ($levels->profit%)",
                         'admin_id' => Auth::id()
                     ]);
                 }
@@ -231,46 +231,68 @@ class AdminController extends Controller
     {
         $packageBuyers = Package2Purchase::where('profit_share', 1)
             ->with('user')
-            ->get()
-            ->groupBy('user_id');
+            ->get();
 
-        $totalBuyers = $packageBuyers->count();
+        $totalAmount = $finalProfit * ($profitSharePercentage / 100);
 
-        if ($totalBuyers > 0) {
-            $totalAmount = $finalProfit * ($profitSharePercentage / 100);
-            $perUserAmount = $totalAmount / $totalBuyers;
+        // Calculate weighted amounts based on package price and duration
+        $totalWeight = 0;
+        $buyersData = [];
 
-            foreach ($packageBuyers as $user_id => $purchases) {
-                $user = $purchases->first()->user;
+        $currentDate = now();
+        $totalMonths = 12;
 
-                $user->increment('points_balance', $perUserAmount);
+        foreach ($packageBuyers as $purchase) {
+            // Calculate duration factor (months since purchase)
+            $monthsSincePurchase = $purchase->created_at->diffInMonths($currentDate);
+            $durationRatio = min(1, $monthsSincePurchase / $totalMonths);
+            dd($durationRatio);
 
-                PointsTransaction::create([
-                    'user_id' => $user->id,
-                    'user_ulid' => $user->ulid,
-                    'points' => $perUserAmount,
-                    'notes' => "₹$perUserAmount received for $year yearly package profit share ($profitSharePercentage%)",
-                    'admin_id' => Auth::id()
-                ]);
+            $weight = $purchase->final_price * $durationRatio;
+            $totalWeight += $weight;
+
+            $buyersData[] = [
+                'user' => $purchase->user,
+                'weight' => $weight,
+                'purchase' => $purchase,
+            ];
+        }
+
+        if ($totalWeight > 0) {
+            foreach ($buyersData as $buyer) {
+                $userAmount = ($buyer['weight'] / $totalWeight) * $totalAmount;
+
+                if ($userAmount > 0) {
+                    $user = $buyer['user'];
+                    $user->increment('points_balance', $userAmount);
+
+                    PointsTransaction::create([
+                        'user_id' => $user->id,
+                        'user_ulid' => $user->ulid,
+                        'points' => $userAmount,
+                        'notes' => "₹$userAmount received for $year yearly package profit share ($profitSharePercentage%) based on package value ₹{$buyer['purchase']->final_price} and duration factor {$buyer['weight']}/$totalWeight",
+                        'admin_id' => Auth::id()
+                    ]);
+                }
             }
         }
     }
 
     public function viewYearlyDistribution()
-{
-    $distributions = DB::table('yearly_royalty_distribution')
-        ->orderBy('year', 'desc')
-        ->paginate(10);
+    {
+        $distributions = DB::table('yearly_royalty_distribution')
+            ->orderBy('year', 'desc')
+            ->paginate(10);
 
-    return view('admin.view-yearly-distribution', compact('distributions'));
-}
+        return view('admin.view-yearly-distribution', compact('distributions'));
+    }
 
-public function viewMonthlyDistributions()
+    public function viewMonthlyDistributions()
     {
         $distributions = PackageMonthlyDistribution::with(['user', 'packagePurchase'])
             ->orderBy('distribution_date', 'desc')
             ->paginate(20);
-            
+
         return view('admin.view-monthly-distribution', compact('distributions'));
     }
 }

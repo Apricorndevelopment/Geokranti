@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Console\Commands\CheckRewardsForAllUsers;
+use App\Console\Commands\DistributePackageProfits;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -49,9 +51,8 @@ class Kernel extends HttpKernel
     ];
 
     protected $commands = [
-        \App\Console\Commands\CheckRewardsForAllUsers::class,
-        \App\Console\Commands\DistributePackageProfits::class,
-
+        CheckRewardsForAllUsers::class,
+        DistributePackageProfits::class,
     ];
 
     protected function schedule(Schedule $schedule)

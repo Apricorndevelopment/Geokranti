@@ -1,0 +1,262 @@
+@media (min-width:576px) and (max-width:1799px){
+    .container{
+        min-width: 91% !important;
+        max-width: 91% !important;
+    }
+}
+
+@media(max-width:1399px){
+    .subscribe_section::before {
+        width: 52%;
+    }
+    .banner_right_vector {
+        background-position: 46% 40% , 100% 75% , 36% 60%;
+        background-size: 50% , 90% , 65%;
+    }
+    @keyframes up_down{
+        from{
+            background-position: 46% 40% , 100% 75% , 36% 60%;
+        }
+        to{
+            background-position: 46% 48% , 100% 75% , 36% 60%;
+        }
+    }
+}
+
+@media(max-width:1299px){
+    .phone_2_bg_div {
+        background-size: 80%;
+    }
+    .phone_2 {
+        background-size: 70%;
+        background-position: 65% 40%;
+    }
+    .footer_card_section .footer_card {
+        padding: 25px 60px;
+    }
+}
+
+@media(max-width:1199px){
+    .subscribe_section::before {
+        display: none;
+    }
+    .subscribe_section .mail_image{
+        width: 80px;
+    }
+    .mail_input_box{
+        margin-top: 20px;
+    }
+    .login_section {
+        background-size: 60%  100%, 58%  25%, cover;
+        background-position: -50% , 100% 100% , center;
+    }
+    @keyframes up_down{
+        from{
+            background-position: 46% 40% , 100% 78% , 43% 54%;
+        }
+        to{
+            background-position: 46% 50% , 100% 78% , 43% 54%;
+        }
+    }
+}
+
+@media (max-width:1099px){
+    .banner_right_vector {
+        background-position: 46% 54% , 100% 75% , 36% 60%;
+    }
+    @keyframes up_down{
+        from{
+            background-position: 46% 48% , 100% 75% , 36% 60%;
+        }
+        to{
+            background-position: 46% 54% , 100% 75% , 36% 60%;
+        }
+    }
+    
+}
+
+@media(max-width:991px){
+    .wgl-canvas-outer{
+        display: none !important;
+    }
+    .banner_sub_section .col.position-relative::after{
+        display: none;
+    }
+    .footer_card_section .footer_card {
+        padding: 25px 30px;
+    }
+    .banner_right_vector{
+        display: none;
+    }
+}
+
+@media(max-width:881px){
+    .login_section {
+        background-size: 70%  100%, 58%  25%, cover;
+        background-position: -100% , 100% 100% , center;
+    }
+}
+
+@media(max-width:767px){
+    .explore_lands_slider .carousel-inner {
+        padding: 20px 0;
+    }
+    .carousel-item {
+        padding: 0px 20px;
+    }
+    footer .border-end{
+        border: none !important;
+    }
+    .w-max-content{
+        width: unset;
+    }
+    .login_section {
+        background: url('../images/login_page_bg_2.png') , #0B1226;
+        background-repeat: no-repeat;
+        background-size: 106%  25%, cover;
+        background-position: 100% 100% , center;
+        overflow-y: auto;
+    }
+    .slider_img_div {
+        min-height: 255px;
+    }
+}
+
+@media(max-width:576px){
+    .terms_condition_banner h1 {
+        font-size: 30px;
+    }
+    .navbar-brand img{
+        width: 160px;
+    }
+    .nav_toggal{
+        width: 30px;
+    }
+    header {
+        padding: 10px 0;
+    }
+    header #offcanvasDarkNavbar {
+        max-height: 65vh;
+        min-height: 65vh !important;
+    }
+    header .nav-link {
+        font-size: 16px;
+    }
+    header .nav-link svg{
+        width: 20px;
+        height: 20px;
+    }
+    h1 {
+        line-height: 40px;
+        font-size: 40px;
+    }
+    .main_banner_section {
+        padding: 8rem 0 3rem;
+        min-height: 100%;
+    }
+    .concept_section_tabs_content .slider_img_col{
+        min-height: 200px;
+    }
+    .card_type_1 {
+        padding: 16px;
+    }
+    .subscribe_section h2 {
+        font-size: 26px;
+    }
+    .subscribe_section .mail_image{
+        width: 60px;
+    }
+    .common_section {
+        padding: 30px 0;
+    }
+    .get_in_touch_section .card {
+        padding: 30px 16px;
+    }
+    .footer_card_section .footer_card {
+        padding: 20px 20px;
+        border-radius: 18px;
+    }
+    .footer_phone_img{
+        padding-top: 20px;
+        width: 200px;
+    }
+    .app_link img{
+        width: 140px;
+    }
+    .slider_img_div{
+        height: 200px;
+    }
+    .explore_lands_slider .carousel-control-next, .carousel-control-prev {
+        background: #DCE4F4;
+        width: 35px;
+        height: 35px;
+        border-radius: 100%;
+        opacity: 1;
+        top: 100%;
+    }
+    .explore_lands_slider .carousel-control-prev-icon,
+    .explore_lands_slider .carousel-control-next-icon {
+        width: 15px;
+        height: 15px;
+    }
+    .explore_lands_slider .carousel-control-prev {
+        transform: translate(-0% , -50%);
+        top: unset;
+        bottom: -20px;
+    }
+    .explore_lands_slider .carousel-control-next {
+        transform: translate(0% , -50%);
+        bottom: -20px;
+        top: unset;
+    }
+    .carousel-control-prev {
+        right: 45px;
+        left: unset;
+    }
+    .banner_right_vector {
+        width: 100% !important;
+        height: 100% !important;
+    }
+    .terms_condition_banner {
+        padding: 7rem 0px 6rem 0px;
+    }
+    .terms_card p {
+        padding-bottom: 0px;
+    }
+    .terms_card h3 {
+        padding-top: 8px;
+        padding-bottom: 0px;
+    }
+    .terms_content_section .terms_card {
+        padding: 20px;
+    }
+    .registration_status_section h1 {
+        font-size: 28px;
+    }
+    .explore_lands_slider {
+       padding-bottom: 50px;
+    }
+    .character{
+        width: 150px;
+    }
+    .character_bottom{
+        width: 200px;
+    }
+    .mail_input_box .btn {
+        width: 100%;
+        text-align: justify;
+    }
+    .slider_img_div {
+        min-height: 220px;
+    }
+}
+
+@media (max-width: 420px){
+    .banner_sub_data{
+        flex-direction: column;
+        align-items: start !important;
+    }
+    .banner_sub_data .banner_content_seprator{
+        display: none;
+    }
+}

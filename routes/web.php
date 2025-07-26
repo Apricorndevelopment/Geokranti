@@ -5,6 +5,7 @@ use App\Models\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PackageAssignmentController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\WalletController;
@@ -14,7 +15,7 @@ use App\Models\Package2Details;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('Auth.login');
+    return view('welcome');
 });
 
 Route::get('/test-mail', function () {
@@ -198,3 +199,4 @@ Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('p
 
 // Handle OTP + password submission
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');

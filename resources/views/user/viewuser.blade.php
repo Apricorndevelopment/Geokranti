@@ -28,34 +28,19 @@
                     <div class="card-body">
                        
                         <form id="userDetailsForm" class="user-details-form">
-                            <!-- Row 1 (Light) -->
-                            <div class="row detail-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">ID</label>
-                                        <input type="text" id="detail_id" class="form-control detail-input" readonly>
-                                    </div>
-                                </div>
+                    
+                            <!-- Row 2 (Dark) -->
+                            <div class="row detail-row dark-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="detail-label">Name</label>
                                         <input type="text" id="detail_name" class="form-control detail-input" readonly>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Row 2 (Dark) -->
-                            <div class="row detail-row dark-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="detail-label">ULID</label>
                                         <input type="text" id="detail_ulid" class="form-control detail-input" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">Email</label>
-                                        <input type="text" id="detail_email" class="form-control detail-input" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -219,10 +204,10 @@
                         return;
                     }
 
-                    document.getElementById('detail_id').value = data.id;
+                    // document.getElementById('detail_id').value = data.id;
                     document.getElementById('detail_name').value = data.name;
                     document.getElementById('detail_ulid').value = data.ulid;
-                    document.getElementById('detail_email').value = data.email;
+                    // document.getElementById('detail_email').value = data.email;
                     document.getElementById('detail_doa').value = data.user_doa ?? 'N/A';
                     document.getElementById('detail_rank').value = data.rank || 'N/A';
                     document.getElementById('detail_points').value = data.points_balance || '0';

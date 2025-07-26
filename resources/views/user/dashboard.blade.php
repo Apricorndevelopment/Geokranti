@@ -32,13 +32,23 @@
         }
 
         .avatar-lg {
-            height: 60px;
-            width: 60px;
+            height: 160px;
+            width: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: rgba(255, 255, 255, 0.2);
+             border-radius: 50%;
+    overflow: hidden;
         }
+
+        .avatar-lg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 
         .bg-gradient-primary {
             background: linear-gradient(135deg, #6c5ce7, #341f97) !important;
@@ -89,7 +99,7 @@
         <div class="row mb-2">
             <div class="col-12">
                 <div class="card bg-gradient-primary shadow-inset border-0">
-                    <div class="card-body p-4">
+                    <div class="card-body py-3 px-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="d-flex align-items-center gap-3">
@@ -111,7 +121,7 @@
                                 </div>
                             </div>
                             <div class="avatar avatar-lg rounded-circle shadow">
-                                <i class="fas fa-user text-white fs-4"></i>
+                               <img src="abcd.webp" alt="">
                             </div>
                         </div>
                     </div>

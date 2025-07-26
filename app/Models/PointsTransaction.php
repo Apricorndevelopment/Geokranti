@@ -11,10 +11,10 @@ class PointsTransaction extends Model
 
     protected $fillable = [
         'user_id',
+        'user_ulid',
         'points',
         'notes',
         'admin_id',
-        'user_ulid'
     ];
 
     public function user()
