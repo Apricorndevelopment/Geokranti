@@ -96,7 +96,7 @@
     <div id="showLoaderAjax" class="loader-overlay" style="display: none;">
         <div class="loader-content loader-center text-center">
 
-            <div id="loaderCall"> <img src="{{ asset('assetsfront/front_web/images/loader.png') }}" class="img-fluid"
+            <div id="loaderCall"> <img src="{{ asset('assetsfront/front_web/images/geokranti-dark-removebg-preview.png') }}" class="img-fluid"
                     alt="loader-logo" width="145" height="145"></div>
             <div class="loader-center loader-text">Do not close or reload the page</div>
         </div>
@@ -105,7 +105,7 @@
     <div id="loader-wrapper" class="page-loading">
         <div id="preloader">
             <div id="loader">
-                <img src="{{ asset('geokrantilogo-removebg.png') }}" class="img-fluid" alt="loader-logo" width="165"
+                <img src="{{ asset('assetsfront/front_web/images/geokranti-dark-removebg-preview.png') }}" class="img-fluid" alt="loader-logo" width="165"
                     height="165">
             </div>
         </div>
@@ -139,12 +139,11 @@
 
                 <div class="logo-container">
                     <a href="{{ '/' }}" class="p-0 m-0">
-                        <img src="{{ asset('geokrantilogo-removebg.png') }}" alt="img" width="75px;"
-                            height="72px;">
+                        <img src="{{ asset('assetsfront/front_web/images/geokranti-dark-removebg-preview.png') }}" alt="img" width="79px;"
+                            height="79spx;">
                     </a>
                     <h1 class="m-0 h5 d-none d-md-block">Geo Kranti</h1>
                 </div>
-
 
                 <!-- Right Side: Login/Register -->
                 <div class="d-flex align-items-center gap-sm-3 gap-2">
@@ -941,9 +940,9 @@
             <div class="row pb-4 gy-4 gy-lg-0 fs-14 border-bottom position-relative z-1">
                 <div class="col-lg-4 col-12">
                     <a href="{{ '/' }}">
-                        <img src="{{ asset('geokrantilogo-removebg.png') }}" alt="img" class="iimg-fluid"
-                            style="    width: 50%;
-    height: 169px;">
+                        <img src="{{ asset('assetsfront/front_web/images/geokranti-dark-removebg-preview.png') }}" alt="img" class="iimg-fluid"
+                            style="width: 40%;
+    height: 159px;">
                     </a>
                     <p class="pt-3 fw-light footer_main_para">
                         Embark on your journey today and unlock the boundless opportunities of virtual real estate with
@@ -961,9 +960,9 @@
                         <div class="d-flex gap-4 align-items-start">
                             <img src="{{ asset('assetsfront/front_web/images/footer_address_icon.png') }}"
                                 alt="img" class="img-fluid" width="20" height="18">
-                            <span class="fw-light">Ganaur,
+                            <span class="fw-light">Ganaur, Sonipat
                                 <br>
-                                India
+                                Haryana, India
                             </span>
                         </div>
                         <div class="d-flex gap-4 align-items-start pt-3">
@@ -978,7 +977,7 @@
             </div>
             <div class="row row-cols-1 py-3">
                 <div class="col text-center">
-                    <small class="fw-light">&copy; 2024 Geo Kranti. All Rights Reserved.</small>
+                    <small class="fw-light">&copy; 2025 Geo Kranti. All Rights Reserved.</small>
                 </div>
             </div>
         </div>

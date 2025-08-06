@@ -210,9 +210,18 @@
         }
 
         @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+
             .auth-container {
-                padding: 1.5rem;
+                padding: 1rem;
                 margin: 1rem auto;
+            }
+
+            .text-muted {
+                font-size: 12px;
+                line-height: 0.5;
             }
 
             .logo {
@@ -227,6 +236,17 @@
             .auth-header h1 {
                 font-size: 1.5rem;
             }
+
+            .btn-auth {
+                padding: 10px;
+                margin-top: 0;
+            }
+
+            .privacy-policy {
+                margin: 1rem 0;
+                padding: 12px;
+            }
+
         }
     </style>
 </head>
@@ -257,54 +277,67 @@
                 </div>
             @endif
 
-            <form action="{{ route('register') }}" method="POST">
+            <form action="{{ route('register') }}" method="POST" id="registrationForm">
                 @csrf
 
-                <!-- Full Name -->
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        <input type="text" name="full_name" class="form-control" placeholder="Full Name" required>
+                        <input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control"
+                            placeholder="Full Name" required>
                     </div>
+                    @error('full_name')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
-                <!-- Sponsor ID -->
                 <div class="mb-3 position-relative">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-                        <input type="text" name="sponsor_id" id="sponsor_id" class="form-control"
-                            placeholder="Sponsor ID" required>
+                        <input type="text" name="sponsor_id" value="{{ old('sponsor_id') }}" id="sponsor_id"
+                            class="form-control" placeholder="Sponsor ID" required>
                     </div>
+                    @error('sponsor_id')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                     <small id="sponsor-message" class="text-muted"></small>
                 </div>
 
-                <!-- Parent ID (Optional) -->
                 <div class="mb-3 position-relative">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
-                        <input type="text" name="parent_id" id="parent_id" class="form-control"
-                            placeholder="Parent ID (optional)">
+                        <input type="text" name="parent_id" value="{{ old('parent_id') }}" id="parent_id"
+                            class="form-control" placeholder="Parent ID (optional)">
                     </div>
+                    @error('parent_id')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                     <small id="parent-message" class="text-muted"></small>
                 </div>
 
-                <!-- Email -->
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                        <input type="email" name="email" value="{{ old('email') }}" id="email"
+                            class="form-control" placeholder="Email Address" required>
                     </div>
+                    @error('email')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <small id="email-message" class="text-muted"></small>
                 </div>
 
-                <!-- Phone -->
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                        <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+                        <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
+                            placeholder="Phone Number" required>
                     </div>
+                    @error('phone')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
-                <!-- Password -->
                 <div class="mb-3 position-relative">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -312,9 +345,15 @@
                             placeholder="Password" required>
                     </div>
                     <i class="fas fa-eye toggle-password" toggle="#password"></i>
+                    @error('password')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <div class="password-requirements mt-2">
+                        <small class="text-muted">Password must contain: at least 8 characters, 1 letter, 1 number, 1
+                            special character (@$!%*#?&) </small>
+                    </div>
                 </div>
 
-                <!-- Confirm Password -->
                 <div class="mb-3 position-relative">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -324,7 +363,6 @@
                     <i class="fas fa-eye toggle-password" toggle="#password_confirmation"></i>
                 </div>
 
-                <!-- Privacy Policy -->
                 <div class="privacy-policy mb-4">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="privacy_policy" name="privacy_policy"
@@ -476,6 +514,32 @@
                     this.classList.add('fa-eye');
                 }
             });
+        });
+
+        // Email availability check
+        $('#email').on('blur', function() {
+            const email = $(this).val();
+            if (email) {
+                $.ajax({
+                    url: '/check-email',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        email: email
+                    },
+                    success: function(response) {
+                        if (response.exists) {
+                            $('#email-message').html(
+                                '<span class="text-danger"><i class="fas fa-times-circle"></i> This email is already registered. Please enter another email</span>'
+                                );
+                        } else {
+                            $('#email-message').html(
+                                '<span class="text-success"><i class="fas fa-check-circle"></i> Email available</span>'
+                                );
+                        }
+                    }
+                });
+            }
         });
     </script>
 

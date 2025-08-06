@@ -15,7 +15,8 @@
 
     <style>
         body {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            background: url('/logoimg.png') no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -89,6 +90,9 @@
             @csrf
             <div class="mb-3">
                 <input type="email" name="email" class="form-control" placeholder="Enter your Email" required>
+                @error('email')
+                <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
             </div>
             <button type="submit" class="btn btn-submit"><i class="fas fa-paper-plane me-2"></i> Send OTP</button>
         </form>

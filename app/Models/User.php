@@ -27,11 +27,19 @@ class User extends Authenticatable
         'state',
         'status',
         'sponsor_id',
+        'parent_id',
         'role',
         'points_balance',
         'user_doa',
         'profile_picture',
         'current_rank',
+        'adhar_no',
+        'pan_no',
+        'adhar_photo',
+        'pan_photo',
+        'nom_name',
+        'nom_relation',
+        'bank_name',
         'account_no',
         'ifsc_code',
         'upi_id',
@@ -49,6 +57,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(PointsTransaction::class);
     }
+
+    public function packageInventories()
+{
+    return $this->hasMany(UserPackageInventory::class, 'user_ulid', 'ulid');
+}
 
     /**
      * The attributes that should be hidden for serialization.

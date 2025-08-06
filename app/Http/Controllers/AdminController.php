@@ -119,13 +119,13 @@ class AdminController extends Controller
     public function viewmemeber()
     {
         $member = User::Paginate(10);
-        return view('admin.viewmember', compact('member'));
+        return view('admin.members.viewmember', compact('member'));
     }
 
     public function editMember($id)
     {
         $member = User::findOrFail($id);
-        return view('admin.editmember', compact('member'));
+        return view('admin.members.editmember', compact('member'));
     }
 
     public function updateMember(Request $request, $id)
@@ -140,7 +140,13 @@ class AdminController extends Controller
         ]);
 
         $member->update($request->all());
-        return redirect()->route('admin.viewmember')->with('success', 'Member updated successfully');
+        return redirect()->route('admin.members.viewmember')->with('success', 'Member updated successfully');
+    }
+
+    public function viewMemberDetails($id)
+    {
+        $member = User::findOrFail($id);
+        return view('admin.members.view-details', compact('member'));
     }
 
     public function deleteMember($id)
@@ -246,7 +252,6 @@ class AdminController extends Controller
             // Calculate duration factor (months since purchase)
             $monthsSincePurchase = $purchase->created_at->diffInMonths($currentDate);
             $durationRatio = min(1, $monthsSincePurchase / $totalMonths);
-            dd($durationRatio);
 
             $weight = $purchase->final_price * $durationRatio;
             $totalWeight += $weight;

@@ -24,12 +24,12 @@
 <body>
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-    
+
         <div class="text-center navbar-brand-wrapper ps-0 ps-sm-1 ps-xl-2 d-flex align-items-center justify-content-start">
             <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="">
                 <img src="{{ asset('geokrantilogo.jpg') }}" alt="logo"
                     style="width: 55px; height: 55px; object-fit: cover;" class="me-2" />
-                <h3 class="mb-0">Piyush</h3>
+                <h3 class="mb-0">Geokranti</h3>
             </a>
             <a class="navbar-brand brand-logo-mini" href=""><img src="{{ asset('geokrantilogo.jpg') }}"
                     alt="logo" /></a>
@@ -98,16 +98,16 @@
                     </div>
                 </li>
                 <li class="nav-item nav-profile dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+                    <a class="nav-link dropdown-toggle" href="" data-bs-toggle="dropdown" id="profileDropdown">
                         <?php
-
+                        
                         use Illuminate\Support\Facades\Auth;
                         $user = Auth::user();
                         ?>
                         @if ($user->profile_picture)
-                            <img src="{{ asset('storage/'.$user->profile_picture) }}" alt="Profile Picture">
+                            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture">
                         @else
-                        <img src="{{ asset('assets2/images/faces/face28.jpg') }}" alt="profile" />
+                            <img src="{{ asset('assets2/images/faces/face28.jpg') }}" alt="profile" />
                         @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
@@ -130,93 +130,196 @@
             </button>
         </div>
     </nav>
+
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
+            <ul class="nav" style="list-style: none; padding-left: 0;">
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('user.dashboard') }}">
-                        <i class="icon-grid menu-icon"></i>
+                    <a class="nav-link d-flex align-items-center" href="{{ route('user.dashboard') }}">
+                        <i class="icon-grid menu-icon me-3"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('user.view') }}">
-                        <i class="fa fa-sitemap menu-icon"></i>
+                    <a class="nav-link d-flex align-items-center" href="{{ route('user.view') }}">
+                        <i class="fa fa-sitemap menu-icon me-3"></i>
                         <span class="menu-title">Network Explorer</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('user.viewwallet') }}">
-                        <i class="fa fa-money menu-icon"></i>
-                        <span class="menu-title">Wallet Management</span>
-                    </a>
+                    @php
+                        $user = Auth::user();
+                    @endphp
+                    @if ($user->status === 'inactive')
+                        <a class="nav-link d-flex align-items-center"
+                            onclick="alert('Please activate your account first to purchase any package.')">
+                            <i class="fas fa-shopping-cart menu-icon me-3"></i>
+                            <span class="menu-title">Purchase Package</span>
+                        </a>
+                    @else
+                        <a class="nav-link d-flex align-items-center" href="{{ route('package2.purchase') }}">
+                            <i class="fas fa-shopping-cart menu-icon me-3"></i>
+                            <span class="menu-title">Purchase Package</span>
+                        </a>
+                    @endif
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('package2.purchase') }}">
-                        <i class="fas fa-cubes menu-icon"></i>
-                        <span class="menu-title">Purchase Package</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link " href="{{ route('user.packages') }}">
-                        <i class="fas fa-box-open menu-icon"></i>
+                    <a class="nav-link d-flex align-items-center" href="{{ route('user.packages') }}">
+                        <i class="fas fa-box-open menu-icon me-3"></i>
                         <span class="menu-title">My Packages</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#tables1" aria-expanded="false"
-                        aria-controls="tables">
-                        <i class="fa fa-suitcase menu-icon"></i>
-                        <span class="menu-title">Incentives</span>
-                        <i class="menu-arrow"></i>
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables3"
+                        aria-expanded="false" aria-controls="tables3">
+                        <i class="fa fa-wallet menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Wallet</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
-                    <div class="collapse" id="tables1">
-                        <ul class="nav flex-column sub-menu" style="list-style: none;">
-                            <li class="nav-item"><a class="nav-link" href="{{ route('user.commissions.level1') }}">Direct Commissions</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('user.commissions.level2') }}">Network Bonus</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('user.reports.level-income') }}">Level Income</a></li>
+                    <div class="collapse" id="tables3">
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('user.viewwallet') }}">
+                                    <i class="fa fa-coins me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Manage Wallet</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.transferPointsForm') }}">
+                                    <i class="fa fa-exchange-alt me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Transfer Points</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#tables2" aria-expanded="false"
-                        aria-controls="tables">
-                         <i class="fa fa-download menu-icon"></i>
-                        <span class="menu-title">Download Pdf</span>
-                        <i class="menu-arrow"></i>
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables4"
+                        aria-expanded="false" aria-controls="tables4">
+                        <i class="fas fa-cubes menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Manage Stock</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
+                    </a>
+                    <div class="collapse" id="tables4">
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('user.stock.form') }}">
+                                    <i class="fas fa-truck-moving me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Transfer Stock</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('user.stock.coupon-transfer') }}">
+                                    <i class="fas fa-truck-moving me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Coupon Stock Transfer</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('user.viewStock') }}">
+                                    <i class="fas fa-history me-2" style="font-size: 0.8rem;"></i>
+                                    <span>View Stock History</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables1"
+                        aria-expanded="false" aria-controls="tables1">
+                        <i class="fas fa-award menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Incentives</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
+                    </a>
+                    <div class="collapse" id="tables1">
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.commissions.level1') }}">
+                                    <i class="fas fa-hand-holding-usd me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Direct Commissions</span>
+                                </a></li>
+                            <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.commissions.level2') }}">
+                                    <i class="fas fa-network-wired me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Network Bonus</span>
+                                </a></li>
+                            <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.reports.level-income') }}">
+                                    <i class="fas fa-couch me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Passive Income</span>
+                                </a></li>
+                            <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.rewards.rankRewards', $user->ulid) }}">
+                                    <i class="fas fa-trophy me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Reward Income</span>
+                                </a></li>
+                            <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.yearly.profits') }}">
+                                    <i class="fas fa-crown me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Royalty Income</span>
+                                </a></li>
+                            <li class="nav-item"><a class="nav-link d-flex align-items-center"
+                                    href="{{ route('user.monthly.profits') }}">
+                                    <i class="fas fa-calendar-alt me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Monthly Income</span>
+                                </a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables2"
+                        aria-expanded="false" aria-controls="tables2">
+                        <i class="fas fa-file-download menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Download Pdf</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables2">
-                        <ul class="nav flex-column sub-menu" style="list-style: none;">
-                            <li class="nav-item"> <a class="nav-link" href="/English-Geokranti.com.pdf" download>In English
-                                    </a></li>
-                        <li class="nav-item"> <a class="nav-link" href="/Hindi-Geokranti.com.pdf" download>In Hindi
-                                    </a></li>
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="/English-Geokranti.com.pdf"
+                                    download>
+                                    <i class="fas fa-language me-2" style="font-size: 0.8rem;"></i>
+                                    <span>In English</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="/Hindi-Geokranti.com.pdf"
+                                    download>
+                                    <i class="fas fa-language me-2" style="font-size: 0.8rem;"></i>
+                                    <span>In Hindi</span>
+                                </a>
+                            </li>
                         </ul>
-
                     </div>
                 </li>
             </ul>
         </nav>
 
         {{-- <section class="main-content"> --}}
-            {{-- <div class="section__content"> --}}
+        {{-- <div class="section__content"> --}}
 
-                @section('container') @show
+        @section('container') @show
 
-                {{-- </div>
+        {{-- </div>
         </section> --}}
     </div>
+
     </div>
     <script src="{{ asset('assets2/vendors/js/vendor.bundle.base.js') }}"></script>
-    <script src="{{ asset('assets2/vendors/chart.js/chart.umd.js') }}"></script>>
+    <script src="{{ asset('assets2/vendors/chart.js/chart.umd.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 

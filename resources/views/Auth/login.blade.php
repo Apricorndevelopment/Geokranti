@@ -204,9 +204,18 @@
         }
 
         @media (max-width: 576px) {
+             body {
+                padding: 10px;
+            }
+
             .auth-container {
-                padding: 1.5rem;
+                padding: 1rem;
                 margin: 1rem auto;
+            }
+
+            .text-muted {
+                font-size: 12px;
+                line-height: 0.5;
             }
 
             .logo {
@@ -216,6 +225,16 @@
 
             .brand-name {
                 font-size: 1.8rem;
+            }
+
+             .text-muted {
+                font-size: 12px;
+                line-height: 1.3;
+            }
+
+            .btn-auth {
+                padding: 10px;
+                margin-top: 0;
             }
 
             .auth-header h1 {
@@ -257,8 +276,11 @@
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        <input type="text" name="email" class="form-control" placeholder="Email Address" required>
+                        <input type="text" name="email" class="form-control" placeholder="Email Address" value="{{ old('email') }}" required>
                     </div>
+                    @error('email')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror 
                 </div>
 
                 <div class="mb-3 position-relative">

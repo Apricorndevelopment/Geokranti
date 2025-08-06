@@ -1,10 +1,11 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Commission;
 use App\Models\LevelIncome;
+use App\Models\LoyaltyTransaction;
+use App\Models\MoneyWithdrawl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,11 +13,10 @@ use App\Models\Package1;
 use App\Models\Package2;
 use App\Models\Package2Details;
 use App\Models\Package2Purchase;
+use App\Models\PackageMonthlyDistribution;
 use App\Models\PackageTransaction;
 use App\Models\PointsTransaction;
-use App\Models\RoyaltyTransaction;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,15 +27,6 @@ class UserController extends Controller
         $packages = Package1::all();
         return view('user.dashboard', compact('packages'));
     }
-
-    // public function profile()
-    // {
-    //     // Get the currently authenticated user
-    //     $user = Auth::user();
-
-    //     // Pass the user data to the view
-    //     return view('user.profile', ['user' => $user]);
-    // }
 
     public function profile()
     {
@@ -62,53 +53,6 @@ class UserController extends Controller
         return view('user.edit-profile', ['user' => $user]);
     }
 
-    // public function update(Request $request)
-    // {
-    //     $authUser = Auth::user();
-    //     $user = User::find($authUser->id);
-
-    //     $validated = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-    //         'phone' => 'nullable|string|max:20',
-    //         'address' => 'nullable|string|max:500',
-    //         'state' => 'nullable|string|max:100',
-    //         'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-
-    //         // Password validation rules
-    //         'current_password' => 'nullable|required_with:password|string|min:8',
-    //         'password' => 'nullable|string|min:8|confirmed|different:current_password',
-    //     ]);
-
-    //     // Update basic fields
-    //     $user->name = $validated['name'];
-    //     $user->email = $validated['email'];
-    //     $user->phone = $validated['phone'];
-    //     $user->address = $validated['address'];
-    //     $user->state = $validated['state'];
-
-    //     // Handle profile picture upload
-    //     if ($request->hasFile('profile_picture')) {
-    //         if ($user->profile_picture) {
-    //             Storage::delete('public/' . $user->profile_picture);
-    //         }
-    //         $path = $request->file('profile_picture')->store('profile-pictures', 'public');
-    //         $user->profile_picture = $path;
-    //     }
-
-    //     // Handle password change
-    //     if ($request->filled('current_password')) {
-    //         if (!Hash::check($request->current_password, $user->password)) {
-    //             return back()->withErrors(['current_password' => 'The current password is incorrect']);
-    //         }
-
-    //         $user->password = Hash::make($validated['password']);
-    //     }
-
-    //     $user->save();
-
-    //     return redirect()->route('user.profile')->with('success', 'Profile updated successfully!');
-    // }
 
     public function update(Request $request)
     {
@@ -122,6 +66,16 @@ class UserController extends Controller
             'address' => 'nullable|string|max:500',
             'state' => 'nullable|string|max:100',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            'adhar_no' => 'nullable|string|min:12|max:12',
+            'pan_no' => 'nullable|string|min:10|max:10',
+            'adhar_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'pan_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+
+            'nom_name' => 'nullable|string|max:255',
+            'nom_relation' => 'nullable|string|max:100',
+
+            'bank_name' => 'nullable|string|max:100',
             'account_no' => 'nullable|string|min:6|max:100',
             'ifsc_code' => 'nullable|string|min:4|max:100',
             'upi_id' => 'nullable|string|max:100',
@@ -137,18 +91,26 @@ class UserController extends Controller
             ],
         ], [
             'password.regex' => 'Password must contain at least one special character.',
+            'adhar_no.min' => 'Aadhaar number must be 12 digits',
+            'pan_no.min' => 'PAN number must be 10 characters',
         ]);
 
         // Update basic fields
         $user->fill([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'address' => $validated['address'],
-            'state' => $validated['state'],
-            'account_no' => $validated['account_no'],
-            'ifsc_code' => $validated['ifsc_code'],
-            'upi_id' => $validated['upi_id'],
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'state' => $request->input('state'),
+
+            'adhar_no' => $request->input('adhar_no'),
+            'pan_no' => $request->input('pan_no'),
+            'nom_name' => $request->input('nom_name'),
+            'nom_relation' => $request->input('nom_relation'),
+            'bank_name' => $request->input('bank_name'),
+            'account_no' => $request->input('account_no'),
+            'ifsc_code' => $request->input('ifsc_code'),
+            'upi_id' => $request->input('upi_id'),
         ]);
 
         // Handle profile picture upload
@@ -160,13 +122,31 @@ class UserController extends Controller
             $user->profile_picture = $path;
         }
 
-        // Handle passbook photo upload
+        // Handle passbook photo upload (in passbook-photos folder)
         if ($request->hasFile('passbook_photo')) {
             if ($user->passbook_photo) {
                 Storage::delete('public/' . $user->passbook_photo);
             }
             $path = $request->file('passbook_photo')->store('passbook-photos', 'public');
             $user->passbook_photo = $path;
+        }
+
+        // Handle Aadhaar photo upload (in aadhaar-documents folder)
+        if ($request->hasFile('adhar_photo')) {
+            if ($user->adhar_photo) {
+                Storage::delete('public/' . $user->adhar_photo);
+            }
+            $path = $request->file('adhar_photo')->store('aadhaar-documents', 'public');
+            $user->adhar_photo = $path;
+        }
+
+        // Handle PAN photo upload (in pan-documents folder)
+        if ($request->hasFile('pan_photo')) {
+            if ($user->pan_photo) {
+                Storage::delete('public/' . $user->pan_photo);
+            }
+            $path = $request->file('pan_photo')->store('pan-documents', 'public');
+            $user->pan_photo = $path;
         }
 
         // Handle password change
@@ -177,6 +157,7 @@ class UserController extends Controller
 
             $user->password = Hash::make($validated['password']);
         }
+
 
         $user->save();
 
@@ -200,6 +181,8 @@ class UserController extends Controller
         if ($user->points_balance < $totalCost) {
             return back()->with('error', 'Insufficient balance to purchase this package');
         }
+
+        $couponCode = 'GEO' . $user->id . 'PQ' . $package->package_quantity ;
         // dd($user->id);
         PackageTransaction::create([
             'user_id' => $user->id,
@@ -209,22 +192,12 @@ class UserController extends Controller
             'price' => $package->price,
             'discount_percentage' => $package->discount_per,
             'discount_amount' => $discountAmount,
+            'quantity' => $package->package_quantity,
             'final_price' => $totalCost,
+            'coupon_code' => $couponCode,
+            'status' => 'pending',
             'transaction_date' => now(),
         ]);
-
-
-        if ($user->status == 'inactive') {
-            DB::table('users')
-                ->where('id', $user->id)
-                ->update(['status' => 'active', 'user_doa' => now()]);
-        }
-
-        DB::table('users')
-            ->where('id', $user->id)
-            ->update([
-                'points_balance' => DB::raw('points_balance - ' . $totalCost)
-            ]);
 
         if ($user->status == 'inactive') {
             DB::table('users')
@@ -244,8 +217,12 @@ class UserController extends Controller
             'notes' => 'Deducted for purchasing package: ' . $package->package_name,
         ]);
 
-        return redirect()->route('user.dashboard')->with('success', 'Package purchased successfully!');
+        return redirect()->route('user.dashboard')->with([
+        'success' => 'Package purchased successfully!',
+        'coupon_code' => $couponCode // Pass coupon code to show in success message
+    ]);
     }
+
 
 
     //User side package purchasing after Activation
@@ -309,7 +286,7 @@ class UserController extends Controller
 
             // Process sponsor commissions
             $this->processSponsorCommissions($user, $finalPrice, $package);
-    
+
             // $this->processLevelIncome($user, $finalPrice, $package);
 
             // For calculating the rank of the user based on the total business volume
@@ -326,89 +303,80 @@ class UserController extends Controller
 
     protected function processSponsorCommissions($user, $amount, $package)
     {
+        $hasParent = false;
 
+        // First check parent_id - if exists, only parent gets 3%
         if ($user->parent_id) {
             $parent = User::where('ulid', $user->parent_id)->first();
-            if ($parent) {
+            if ($parent && $parent->status == 'active') {
+                $hasParent = true;
                 $commission = $amount * 0.03;
-
                 $parent->increment('points_balance', $commission);
 
-                PointsTransaction::create([
+                Commission::create([
                     'user_id' => $parent->id,
-                    'user_ulid' => $parent->ulid,
-                    'points' => $commission,
-                    'notes' => '3% commission for being parent from ' . $user->ulid . ' for package: ' . $package->package_name,
-                    'admin_id' => null
+                    'from_ulid' => $user->ulid,
+                    'from_name' => $user->name,
+                    'purchase_amount' => $amount,
+                    'commission' => $commission,
+                    'level' => 1
                 ]);
             }
         }
 
-        // Level 1 - Direct sponsor (3%)
-        if ($user->sponsor_id) {
+        // Process sponsor levels only if no active parent exists
+        if (!$hasParent && $user->sponsor_id) {
             $sponsorL1 = User::where('ulid', $user->sponsor_id)->first();
-            if ($sponsorL1) {
+            if ($sponsorL1 && $sponsorL1->status == 'active') {
                 $commissionL1 = $amount * 0.03;
-
                 $sponsorL1->increment('points_balance', $commissionL1);
-
-                // PointsTransaction::create([
-                //     'user_id' => $sponsorL1->id,
-                //     'user_ulid' => $sponsorL1->ulid,
-                //     'points' => $commissionL1,
-                //     'notes' => '3% commission from ' . $user->ulid . ' for package: ' . $package->package_name,
-                //     'admin_id' => null
-                // ]);
-
                 Commission::create([
                     'user_id' => $sponsorL1->id,
-                    'user_ulid' => $sponsorL1->ulid,
+                    'from_ulid' => $user->ulid,
                     'from_name' => $user->name,
                     'purchase_amount' => $amount,
                     'commission' => $commissionL1,
                     'level' => 1
                 ]);
+            }
+        }
 
-                // Level 2 - Sponsor's sponsor (1%) if has at least 2 downlines
-                if ($sponsorL1->sponsor_id) {
-                    $sponsorL2 = User::where('ulid', $sponsorL1->sponsor_id)->first();
-                    if ($sponsorL2) {
-                        $downlineCount = User::where('sponsor_id', $sponsorL1->ulid)->count();
-                        if ($downlineCount >= 2) {
-                            $commissionL2 = $amount * 0.01;
+        // Process L2 commission regardless of parent/L1 status
+        if ($user->sponsor_id) {
+            $sponsorL1 = User::where('ulid', $user->sponsor_id)->first();
+            if ($sponsorL1 && $sponsorL1->sponsor_id) {
+                $sponsorL2 = User::where('ulid', $sponsorL1->sponsor_id)->first();
+                if ($sponsorL2) {
+                    $downlineCount = User::where('sponsor_id', $sponsorL2->ulid)->where('status','active')->count();
+                    if ($downlineCount >= 2 && $sponsorL2->status == 'active') {
+                        $commissionL2 = $amount * 0.01;
+                        $sponsorL2->increment('points_balance', $commissionL2);
+                        Commission::create([
+                            'user_id' => $sponsorL2->id,
+                            'from_ulid' => $user->ulid,
+                            'from_name' => $user->name,
+                            'purchase_amount' => $amount,
+                            'commission' => $commissionL2,
+                            'level' => 2
+                        ]);
+                    }
 
-                            $sponsorL2->increment('points_balance', $commissionL2);
-
-                            Commission::create([
-                                'user_id' => $sponsorL2->id,
-                                'user_ulid' => $sponsorL2->ulid,
-                                'from_name' => $user->name,
-                                'purchase_amount' => $amount,
-                                'commission' => $commissionL2,
-                                'level' => 2
-                            ]);
-
-                            // Level 3 - Sponsor's sponsor's sponsor (1%) if has at least 3 downlines
-                            if ($sponsorL2->sponsor_id) {
-                                $sponsorL3 = User::where('ulid', $sponsorL2->sponsor_id)->first();
-                                if ($sponsorL3) {
-                                    $downlineCountL2 = User::where('sponsor_id', $sponsorL2->ulid)->count();
-
-                                    if ($downlineCountL2 >= 3) {
-                                        $commissionL3 = $amount * 0.01;
-
-                                        $sponsorL3->increment('points_balance', $commissionL3);
-
-                                        Commission::create([
-                                            'user_id' => $sponsorL3->id,
-                                            'user_ulid' => $sponsorL3->ulid,
-                                            'from_name' => $user->name,
-                                            'purchase_amount' => $amount,
-                                            'commission' => $commissionL3,
-                                            'level' => 3
-                                        ]);
-                                    }
-                                }
+                    // Process L3 commission
+                    if ($sponsorL2->sponsor_id) {
+                        $sponsorL3 = User::where('ulid', $sponsorL2->sponsor_id)->first();
+                        if ($sponsorL3) {
+                            $downlineCountL2 = User::where('sponsor_id', $sponsorL3->ulid)->where('status','active')->count();
+                            if ($downlineCountL2 >= 3 && $sponsorL3->status == 'active') {
+                                $commissionL3 = $amount * 0.01;
+                                $sponsorL3->increment('points_balance', $commissionL3);
+                                Commission::create([
+                                    'user_id' => $sponsorL3->id,
+                                    'from_ulid' => $user->ulid,
+                                    'from_name' => $user->name,
+                                    'purchase_amount' => $amount,
+                                    'commission' => $commissionL3,
+                                    'level' => 3
+                                ]);
                             }
                         }
                     }
@@ -502,6 +470,7 @@ class UserController extends Controller
     //Calculating the rank of the user based on the total business volume
     public function checkAndRewardUser($userUlid)
     {
+        // dd($userUlid);
         // Get direct sponsored users (legs)
         $directLegs = User::where('sponsor_id', $userUlid)->get();
 
@@ -517,7 +486,6 @@ class UserController extends Controller
         // Find Strong Leg
         $strongLegUlid = array_search(max($legsBusiness), $legsBusiness);
         $strongLegBusiness = $legsBusiness[$strongLegUlid];
-
         // dd($legsBusiness, $strongLegUlid, $strongLegBusiness);
 
         // Sum of Weaker Legs
@@ -538,6 +506,7 @@ class UserController extends Controller
         }
 
         $user = User::where('ulid', $userUlid)->first();
+
 
         $user->update([
             'left_business' => $leftBusiness,
@@ -634,19 +603,25 @@ class UserController extends Controller
     public function viewWallet()
     {
         $points = Auth::user()->points_balance;
-        $royalty = Auth::user()->royalty_balance;
+        $loyalty = Auth::user()->loyalty_balance;
+        $user = Auth::user();
 
-        $pointsTransactions = PointsTransaction::where('user_id', Auth::user()->id)
+        $withdrawals = MoneyWithdrawl::where('user_id', $user->id)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $pointsTransactions = PointsTransaction::where('user_id', $user->id)
             ->latest()
             ->take(10)
             ->get();
 
-        $royaltyTransactions = RoyaltyTransaction::where('user_id', Auth::user()->id)
+        $loyaltyTransactions = LoyaltyTransaction::where('user_id',  $user->id)
             ->latest()
             ->take(10)
             ->get();
 
-        return view('user.viewwallet', compact('points', 'royalty', 'pointsTransactions', 'royaltyTransactions'));
+        return view('user.viewwallet', compact('points', 'loyalty', 'pointsTransactions', 'loyaltyTransactions', 'withdrawals'));
     }
 
     public function level1Commissions()
@@ -683,5 +658,79 @@ class UserController extends Controller
         $totalRecords = LevelIncome::where('user_id', Auth::id())->count();
 
         return view('user.rewards.level-income', compact('incomes', 'totalIncome', 'totalRecords'));
+    }
+
+    public function showUserRankRewards($ulid)
+    {
+        $user = User::where('ulid', $ulid)->firstOrFail();
+
+        // Get all rank rewards received by user
+        $rewards = PointsTransaction::where('user_id', $user->id)
+            ->where('notes', 'like', 'Rank Reward:%')
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->map(function ($transaction) {
+                return [
+                    'rank' => str_replace('Rank Reward: ', '', $transaction->notes),
+                    'amount' => $transaction->points,
+                    'date' => $transaction->created_at->format('d M Y'),
+                ];
+            });
+
+        $currentRank = $user->current_rank;
+
+        // Get all possible ranks from royalty_level_rewards
+        $allRanks = DB::table('royalty_level_rewards')
+            ->orderBy('sr_no')
+            ->pluck('level')
+            ->toArray();
+
+        return view('user.rewards.rankRewards', compact('user', 'rewards', 'currentRank', 'allRanks'));
+    }
+
+    public function showUserYearlyProfits()
+    {
+        $user = Auth::user();
+
+        // Get rank-based profits
+        $rankProfits = PointsTransaction::where('user_id', $user->id)
+            ->where('notes', 'like', '%yearly profit as %')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($transaction) {
+                preg_match('/₹(\d+) received for (\d{4}) yearly profit as (.+) \((\d+)%\)/', $transaction->notes, $matches);
+                return [
+                    'type' => 'rank',
+                    'amount' => $transaction->points,
+                    'year' => $matches[2] ?? null,
+                    'rank' => $matches[3] ?? null,
+                    'percentage' => $matches[4] ?? null,
+                    'date' => $transaction->created_at->format('d M Y'),
+                ];
+            });
+
+        // Combine and sort by year
+        $allProfits = $rankProfits
+            ->sortByDesc('year')
+            ->groupBy('year');
+
+        // Get user's packages eligible for profit share
+        $eligiblePackages = Package2Purchase::where('user_id', $user->id)
+            ->where('profit_share', 1)
+            ->get();
+
+        return view('user.rewards.yearlyProfits', compact('user', 'allProfits', 'eligiblePackages'));
+    }
+
+    public function showUserMonthlyProfits()
+    {
+        $user = Auth::user();
+        $distributions = PackageMonthlyDistribution::with(['user', 'packagePurchase'])
+            ->where('user_id', $user->id)
+            ->orderBy('distribution_date', 'desc')
+            ->paginate(10);
+
+
+        return view('user.rewards.view-monthlyProfits', compact('distributions'));
     }
 }

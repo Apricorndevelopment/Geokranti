@@ -1,6 +1,16 @@
 @extends('layouts.layout')
 @section('title', 'Dashboard')
 @section('container')
+
+<style>
+
+    /* .content-wrapper{
+        background: url('/logoimg.png') no-repeat center center fixed;
+        background-size: cover;
+        padding: 20px;
+    } */
+
+</style>
    
     <div class="main-panel">
         <div class="content-wrapper">
@@ -449,7 +459,7 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
-        <footer class="footer">
+        <footer class="footer bg-tr">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
                 <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2025 Apricorn
                     Solutions <a href="https://apricornsolutions.com/" target="_blank"> apricornsolutions.com </a>

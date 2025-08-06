@@ -16,7 +16,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover table-striped">
-                    <thead class="table-light">
+                    <thead class="table-dark">
                         <tr>
                             <th>#</th>
                             <th>From User Name</th>
@@ -32,11 +32,11 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $commission->from_name }}</td>
-                            <td>{{ $commission->user_ulid }}</td>
+                            <td>{{ $commission->from_ulid }}</td>
                             <td class="text-success">₹{{ number_format($commission->purchase_amount, 2) }}</td>
                             <td class="text-primary fw-bold">₹{{ number_format($commission->commission, 2) }}</td>
                             <td class="text-secondary">{{ $commission->level }}</td>
-                            <td>{{ $commission->created_at->format('d M Y') }}</td>
+                            <td>{{ $commission->created_at->format('d M Y h:i a ') }}</td>
                         </tr>
                         @empty
                         <tr>

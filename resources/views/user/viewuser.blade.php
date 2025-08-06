@@ -13,72 +13,85 @@
                     <div class="card-header bg-info text-white">
                         My Network
                     </div>
-                    <div class="card-body tree-container" style="max-height: 600px; overflow-y: auto;">
+                    <div class="card-body tree-container p-2 p-sm-3 p-md-4" style="max-height: 600px; overflow-y: auto;">
                         {!! $treeHtml !!}
                     </div>
                 </div>
             </div>
 
             <!-- Right: User Details -->
-            <div class="col-md-6">
+            <div class="col-md-6 mt-2 mt-md-0">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-info text-white">
-                        User Details
+                    <div class="card-header bg-info text-white py-2">
+                        <h6 class="mb-0">User Details</h6>
                     </div>
-                    <div class="card-body">
-                       
-                        <form id="userDetailsForm" class="user-details-form">
-                    
-                            <!-- Row 2 (Dark) -->
-                            <div class="row detail-row dark-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">Name</label>
-                                        <input type="text" id="detail_name" class="form-control detail-input" readonly>
+                    <div class="card-body p-0 p-md-2">
+                        <form id="userDetailsForm" class="user-details-form p-2 p-md-3">
+                            <!-- Row 1 -->
+                            <div class="row mb-1 g-3 g-md-4">
+                                <div class="col-6">
+                                    <div class="form-group mb-1">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">Name</label>
+                                        <input type="text" id="detail_name"
+                                            class="form-control form-control-sm detail-input" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">ULID</label>
-                                        <input type="text" id="detail_ulid" class="form-control detail-input" readonly>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Row 3 (Light) -->
-                            <div class="row detail-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">Registered Date</label>
-                                        <input type="text" id="detail_doa" class="form-control detail-input" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">Rank</label>
-                                        <input type="text" id="detail_rank" class="form-control detail-input" readonly>
+                                <div class="col-6">
+                                    <div class="form-group mb-1">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">ULID</label>
+                                        <input type="text" id="detail_ulid"
+                                            class="form-control form-control-sm detail-input" readonly>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Row 4 (Dark) -->
-                            <div class="row detail-row dark-row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">Points Balance</label>
-                                        <input type="text" id="detail_points" class="form-control detail-input" readonly>
+                            <!-- Row 2 -->
+                            <div class="row mb-1 g-3 g-md-4">
+                                <div class="col-6">
+                                    <div class="form-group mb-1">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">Registered Date</label>
+                                        <input type="text" id="detail_doa"
+                                            class="form-control form-control-sm detail-input" readonly>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="detail-label">Royalty Balance</label>
-                                        <input type="text" id="detail_royalty" class="form-control detail-input"
-                                            readonly>
+                                <div class="col-6">
+                                    <div class="form-group mb-1">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">Rank</label>
+                                        <input type="text" id="detail_rank"
+                                            class="form-control form-control-sm detail-input" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="row mb-1 g-3 g-md-4">
+                                <div class="col-6">
+                                    <div class="form-group mb-1">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">Points Balance</label>
+                                        <input type="text" id="detail_points"
+                                            class="form-control form-control-sm detail-input" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group mb-1">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">Loyalty Balance</label>
+                                        <input type="text" id="detail_loyalty"
+                                            class="form-control form-control-sm detail-input" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Business -->
+                            <div class="row justify-content-center mt-1">
+                                <div class="col-12 col-md-8">
+                                    <div class="form-group mb-0">
+                                        <label class="detail-label small text-muted mb-0 mb-md-2">Total Team Business</label>
+                                        <input type="text" id="detail_business"
+                                            class="form-control form-control-sm detail-input" readonly>
                                     </div>
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -105,15 +118,20 @@
             font-weight: 600;
             color: #495057;
             margin-bottom: 5px;
-            font-size: 14px;
+            font-size: 10px;
         }
 
         .detail-input {
             background-color: white;
             border: 1px solid #ced4da;
             border-radius: 4px;
-            padding: 8px 12px;
+            padding: 5px 12px;
+            height: calc(1.5em + 0.5rem + 2px);
             font-size: 14px;
+        }
+
+        .card-header {
+            font-size: 0.9rem;
         }
 
         .detail-input:focus {
@@ -125,7 +143,7 @@
         }
     </style>
 @endsection
-@push('styles')
+{{-- @push('styles')
     <style>
         .tree,
         .tree ul {
@@ -150,8 +168,6 @@
         }
 
         .node-label {
-            background: #007bff;
-            color: white;
             padding: 2px 6px;
             border-radius: 3px;
             font-family: monospace;
@@ -177,7 +193,7 @@
             font-weight: bold;
         }
     </style>
-@endpush
+@endpush --}}
 
 
 @push('scripts')
@@ -194,7 +210,6 @@
             }
         }
 
-
         function loadUserDetails(ulid) {
             fetch('/get-user-details/' + ulid)
                 .then(res => res.json())
@@ -204,17 +219,24 @@
                         return;
                     }
 
-                    // document.getElementById('detail_id').value = data.id;
-                    document.getElementById('detail_name').value = data.name;
-                    document.getElementById('detail_ulid').value = data.ulid;
-                    // document.getElementById('detail_email').value = data.email;
-                    document.getElementById('detail_doa').value = data.user_doa ?? 'N/A';
+                    // Calculate total business
+                    const leftBusiness = parseFloat(data.left_business) || 0;
+                    const rightBusiness = parseFloat(data.right_business) || 0;
+                    const totalBusiness = (leftBusiness + rightBusiness).toFixed(2);
+
+                    // Update form fields
+                    document.getElementById('detail_name').value = data.name || 'N/A';
+                    document.getElementById('detail_ulid').value = data.ulid || 'N/A';
+                    document.getElementById('detail_doa').value = data.user_doa || 'N/A';
                     document.getElementById('detail_rank').value = data.rank || 'N/A';
                     document.getElementById('detail_points').value = data.points_balance || '0';
-                    document.getElementById('detail_royalty').value = data.royalty_balance || '0';
+                    document.getElementById('detail_loyalty').value = data.loyalty_balance || '0';
+                    document.getElementById('detail_business').value = totalBusiness;
                 })
-
-                .catch(err => console.error(err));
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('Failed to load user details');
+                });
         }
     </script>
 @endpush

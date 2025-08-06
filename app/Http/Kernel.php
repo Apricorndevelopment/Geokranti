@@ -57,7 +57,6 @@ class Kernel extends HttpKernel
 
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('profits:distribute-monthly')
-            ->monthlyOn(1, '00:00'); // Run on 1st of every month
+        $schedule->command('profits:distribute-monthly')->monthlyOn(1, '00:00'); // Run on 1st of every month
     }
 }

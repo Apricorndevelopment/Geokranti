@@ -15,4 +15,5 @@ class Package2 extends Model
     {
         return $this->hasMany(Package2Details::class, 'package2_id');
     }
+
 }

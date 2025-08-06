@@ -4,7 +4,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
+            <div class="card shadow-2xl">
                 <div class="card-header bg-primary text-white">
                     <h3 class="mb-0">Hello, {{ $user->name }}</h3>
                 </div>

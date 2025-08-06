@@ -18,18 +18,19 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets2/js/select.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets2/css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets2/images/favicon.png') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 fixed-top d-flex flex-row">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-             <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="">
+    <nav class="navbar col-lg-12 col-12 fixed-top d-flex flex-row py-0">
+        <div class="text-center navbar-brand-wrapper ps-0 ps-sm-1 ps-xl-2 d-flex align-items-center justify-content-start">
+            <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="">
                 <img src="{{ asset('geokrantilogo.jpg') }}" alt="logo"
                     style="width: 55px; height: 55px; object-fit: cover;" class="me-2" />
-                <h3 class="mb-0">Piyush</h3>
+                <h3 class="mb-0">Geokranti</h3>
             </a>
-             <a class="navbar-brand brand-logo-mini" href=""><img src="{{ asset('geokrantilogo.jpg') }}"
+            <a class="navbar-brand brand-logo-mini" href=""><img src="{{ asset('geokrantilogo.jpg') }}"
                     alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -95,16 +96,16 @@
                     </div>
                 </li>
                 <li class="nav-item nav-profile dropdown">
-                   <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
                         <?php
-
+                        
                         use Illuminate\Support\Facades\Auth;
                         $user = Auth::user();
                         ?>
                         @if ($user->profile_picture)
-                            <img src="{{ asset('storage/'.$user->profile_picture) }}" alt="Profile Picture">
+                            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture">
                         @else
-                        <img src="{{ asset('assets2/images/faces/face28.jpg') }}" alt="profile" />
+                            <img src="{{ asset('assets2/images/faces/face28.jpg') }}" alt="profile" />
                         @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
@@ -132,174 +133,177 @@
     <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
+            <ul class="nav" style="list-style: none; padding-left: 0;">
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::is('admin.dashboard') ? 'active' : '' }}"
+                    <a class="nav-link d-flex align-items-center {{ Route::is('admin.dashboard') ? 'active' : '' }}"
                         href="{{ route('admin.dashboard') }}">
-                        <i class="icon-grid menu-icon"></i>
+                        <i class="icon-grid menu-icon me-3"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </li>
 
                 @php
-
                     $adminId = Auth::guard('admin')->id();
                 @endphp
 
                 <li class="nav-item">
-                    <a class="nav-link {{  Route::is('admin.user.tree') ? 'active' : '' }}"
-                        href="{{ route('admin.user.tree', $adminId) }}">
-                        <i class="fa fa-sitemap menu-icon"></i>
+                    <a class="nav-link d-flex align-items-center" href="{{ route('admin.user.tree', $adminId) }}">
+                        <i class="fa fa-sitemap menu-icon me-3"></i>
                         <span class="menu-title">Admin User Tree</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::is('admin.viewmember') ? 'active' : '' }}"
-                        href="{{ route('admin.viewmember') }}">
-                        <i class="fa fa-users menu-icon"></i>
+                    <a class="nav-link d-flex align-items-center" href="{{ route('admin.viewmember') }}">
+                        <i class="fa fa-users menu-icon me-3"></i>
                         <span class="menu-title">User/Member</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::is('admin.viewwallet') ? 'active' : '' }}"
-                        href="{{ route('admin.wallet') }}">
-                        <i class="fa fa-money menu-icon"></i>
-                        <span class="menu-title">Wallet Management</span>
+                    <a class="nav-link d-flex align-items-center" href="{{ route('admin.products.index') }}">
+                        <i class="fa fa-tags menu-icon me-3"></i>
+                        <span class="menu-title">Manage Products</span>
                     </a>
                 </li>
 
-              
-              
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
-                        aria-controls="form-elements">
-                        <i class="icon-columns menu-icon"></i>
-                        <span class="menu-title">Form elements</span>
-                        <i class="menu-arrow"></i>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables3"
+                        aria-expanded="false" aria-controls="tables3">
+                        <i class="fa fa-cubes menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Manage Stock</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
-                    <div class="collapse" id="form-elements">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic
-                                    Elements</a></li>
+                    <div class="collapse" id="tables3">
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('admin.stock.form') }}">
+                                    <i class="fa fa-truck me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Transfer Stock</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('admin.viewStock') }}">
+                                    <i class="fa fa-credit-card me-2" style="font-size: 0.8rem;"></i>
+                                    <span>View User's Stock</span>
+                                </a>
+                            </li>
+                           
                         </ul>
                     </div>
-                </li> -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false"
-                        aria-controls="charts">
-                        <i class="icon-bar-graph menu-icon"></i>
-                        <span class="menu-title">Charts</span>
-                        <i class="menu-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables2"
+                        aria-expanded="false" aria-controls="tables2">
+                        <i class="fa fa-money menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Wallet Management</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
-                    <div class="collapse" id="charts">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a>
+                    <div class="collapse" id="tables2">
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('admin.wallet') }}">
+                                    <i class="fa fa-share me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Provide Points</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('admin.withdrawls.index') }}">
+                                    <i class="fa fa-credit-card me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Withdrawal Requests</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('admin.wallet-transactions') }}">
+                                    <i class="fa fa-exchange-alt me-2" style="font-size: 0.8rem;"></i>
+                                    <span>All Transactions</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
-                </li> -->
+                </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false"
-                        aria-controls="tables">
-                        <i class="fa fa-suitcase menu-icon"></i>
-                        <span class="menu-title">Package Management</span>
-                        <i class="menu-arrow"></i>
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables"
+                        aria-expanded="false" aria-controls="tables">
+                        <i class="fa fa-suitcase menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Package Management</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link {{ Route::is('admin.package') ? 'active' : '' }}" href="{{ route('admin.package') }}">View
-                                    </a></li>
-                            <li class="nav-item"> <a class="nav-link {{ Route::is('admin.packages.assign') ? 'active' : '' }}" href="{{ route('admin.packages.assign') }}">Active
-                                    </a></li>
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="{{ route('admin.package') }}">
+                                    <i class="fa fa-eye me-2" style="font-size: 0.8rem;"></i>
+                                    <span>View Packages</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('admin.packages.assign') }}">
+                                    <i class="fa fa-check-circle me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Active</span>
+                                </a>
+                            </li>
                         </ul>
-
                     </div>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#tables1" aria-expanded="false"
-                        aria-controls="tables">
-                        <i class="fa fa-suitcase menu-icon"></i>
-                        <span class="menu-title">Profit Distribution</span>
-                        <i class="menu-arrow"></i>
+                    <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#tables1"
+                        aria-expanded="false" aria-controls="tables1">
+                        <i class="fa fa-balance-scale menu-icon me-3"></i>
+                        <span class="menu-title flex-grow-1">Profit Distribution</span>
+                        <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables1">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.profit.distribution') }}">Distrubute Profit
-                                    </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.view.monthlyDistribution') }}">View Monthly Profit
-                                    </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="{{ route('admin.view.distribution') }}">View Yearly Profit
-                                    </a></li>
+                        <ul class="nav flex-column sub-menu ps-4"
+                            style="border-left: 2px solid #4b49ac; list-style: none;">
+                            <li class="nav-item" style="list-style: none; ">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('admin.profit.distribution') }}">
+                                    <i class="fa fa-share-alt me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Distribute Profit</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('admin.view.monthlyDistribution') }}">
+                                    <i class="fa fa-calendar me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Monthly Profit</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center"
+                                    href="{{ route('admin.view.distribution') }}">
+                                    <i class="fa fa-calendar-check-o me-2" style="font-size: 0.8rem;"></i>
+                                    <span>Yearly Profit</span>
+                                </a>
+                            </li>
                         </ul>
-
                     </div>
                 </li>
-
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false"
-                        aria-controls="icons">
-                        <i class="icon-contract menu-icon"></i>
-                        <span class="menu-title">Icons</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="icons">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li> -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false"
-                        aria-controls="auth">
-                        <i class="icon-head menu-icon"></i>
-                        <span class="menu-title">User Pages</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="auth">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a>
-                            </li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html">
-                                    Register </a></li>
-                        </ul>
-                    </div>
-                </li> -->
-                <!-- <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#error" aria-expanded="false"
-                        aria-controls="error">
-                        <i class="icon-ban menu-icon"></i>
-                        <span class="menu-title">Error pages</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="error">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404
-                                </a></li>
-                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500
-                                </a></li>
-                        </ul>
-                    </div>
-                </li> -->
-              
             </ul>
         </nav>
 
         {{-- <section class="main-content"> --}}
-            {{-- <div class="section__content"> --}}
+        {{-- <div class="section__content"> --}}
 
-                @section('container') @show
+        @section('container') @show
 
-                {{-- </div>
+        {{-- </div>
         </section> --}}
     </div>
     </div>
     <script src="{{ asset('assets2/vendors/js/vendor.bundle.base.js') }}"></script>
     <script src="{{ asset('assets2/vendors/chart.js/chart.umd.js') }}"></script>
-    <!-- <script src="{{ asset('assets2/vendors/datatables.net/jquery.dataTables.js') }}"></script> -->
-    <!-- <script src="{{ asset('assets2/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script> -->
+    {{-- <!-- <script src="{{ asset('assets2/vendors/datatables.net/jquery.dataTables.js') }}"></script> -->
+    <!-- <script src="{{ asset('assets2/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script> --> --}}
     <script src="{{ asset('assets2/js/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('assets2/js/off-canvas.js') }}"></script>
     <script src="{{ asset('assets2/js/template.js') }}"></script>
@@ -308,6 +312,7 @@
     <script src="{{ asset('assets2/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets2/js/dashboard.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
 </body>
 

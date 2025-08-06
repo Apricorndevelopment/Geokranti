@@ -92,15 +92,24 @@
 
             <div class="mb-3">
                 <input type="text" name="otp" class="form-control" placeholder="Enter OTP" required>
+                @error('otp')
+                <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <input type="password" name="password" class="form-control" placeholder="New Password" required>
+                @error('password')
+                <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password"
                     required>
+                @error('password_confirmation')
+                <div class="text-danger mt-2">{{ $message }}</div>
+                @enderror
             </div>
 
             <button type="submit" class="btn btn-submit">

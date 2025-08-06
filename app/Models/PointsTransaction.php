@@ -14,6 +14,7 @@ class PointsTransaction extends Model
         'user_ulid',
         'points',
         'notes',
+        'balance',
         'admin_id',
     ];
 

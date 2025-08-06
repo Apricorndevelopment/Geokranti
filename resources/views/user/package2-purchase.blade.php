@@ -5,7 +5,7 @@
     <div class="container-fluid p-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Purchase Package 2</h4>
+                <h4 class="mb-0">Purchase Package </h4>
             </div>
             @session('success')
                 <div class="alert alert-success alert-dismissible fade show" role="alert">

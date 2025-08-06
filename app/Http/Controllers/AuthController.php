@@ -105,15 +105,14 @@ class AuthController extends Controller
 
         Mail::to($user->email)->send(new UserRegisteredMail($user, $plainPassword));
 
-
-        return redirect()->route('auth.login')->with('success', 'Registration successful. Please login.');
+        return view('Auth.congratulations', compact('user'));
     }
 
     public function login()
     {
         return view('Auth.login');
     }
-    
+
     public function showLoginForm()
     {
         return view('Auth.login');
@@ -203,93 +202,6 @@ class AuthController extends Controller
         ]);
     }
 
-    // public function showTreeRecursive()
-    // {
-    //     $user = Auth::user(); // Logged-in user
-
-    //     $tree = $this->buildTree($user->ulid); // Use ulid as key
-    //     $treeText = $this->renderTreeText($user, $tree);
-    //     return view('user.viewuser', compact('user', 'tree', 'treeText'));
-    // }
-
-    // private function buildTree($ulid)
-    // {
-    //     $users = User::where('sponsor_id', $ulid)->get();
-
-    //     return $users->map(function ($user) {
-    //         $user->children = $this->buildTree($user->ulid); // Recursive by ULID
-    //         $user->total_team = $this->countTotalTeam($user->ulid);
-    //         return $user;
-    //     });
-    // }
-
-    // private function renderTreeText($user, $children, $prefix = '')
-    // {
-    //     $output = $prefix . '|---📁 ' . $user->name . ' (' . $user->ulid . ')' . "\n";
-
-    //     if ($children->isNotEmpty()) {
-    //         foreach ($children as $index => $child) {
-    //             $hasMore = $index < count($children) - 1;
-    //             $subPrefix = $prefix . ($hasMore ? "    |" : "     ");
-    //             $output .= $this->renderTreeText($child, $child->children ?? collect(), $subPrefix);
-    //         }
-    //     } else {
-    //         $output .= $prefix . "|\n";
-    //     }
-
-    //     return $output;
-    // }
-
-    // public function showUserTreeFromAdmin($adminId)
-    // {
-    //     $admin = Admin::findOrFail($adminId);
-
-    //     // Get top-level users sponsored by this admin's AUID
-    //     $tree = $this->buildTreeFromAdmin($admin->auid);
-
-    //     // Convert the tree to text format
-    //     $treeText = $this->renderTreeTextFromAdmin($admin, $tree);
-
-    //     return view('admin.user_tree', compact('admin', 'tree', 'treeText'));
-    // }
-
-    // private function buildTreeFromAdmin($sponsor_id)
-    // {
-    //     $users = User::where('sponsor_id', $sponsor_id)->get();
-
-    //     return $users->map(function ($user) {
-    //         $user->children = $this->buildTreeFromAdmin($user->ulid);
-    //         $user->total_team = $this->countTotalTeam($user->ulid);
-    //         return $user;
-    //     });
-    // }
-
-    // private function renderTreeTextFromAdmin($admin, $children)
-    // {
-    //     $output = '└── 👑 Admin: ' . $admin->name . ' (' . $admin->auid . ')' . "\n";
-
-    //     foreach ($children as $index => $child) {
-    //         $isLast = $index === count($children) - 1;
-    //         $output .= $this->renderTreeTextStyled($child, $child->children ?? collect(), '', $isLast);
-    //     }
-
-    //     return $output;
-    // }
-
-    // private function renderTreeTextStyled($user, $children, $prefix = '', $isLast = true)
-    // {
-    //     $branch = $isLast ? '└──' : '├──';
-    //     $output = $prefix . $branch . ' 📁 ' . $user->name . ' (' . $user->ulid . ')' . "\n";
-
-    //     $newPrefix = $prefix . ($isLast ? '    ' : '│   ');
-
-    //     foreach ($children as $index => $child) {
-    //         $childIsLast = $index === count($children) - 1;
-    //         $output .= $this->renderTreeTextStyled($child, $child->children ?? collect(), $newPrefix, $childIsLast);
-    //     }
-
-    //     return $output;
-    // }
 
     // For user Tree
     public function showTreeRecursive()
@@ -316,18 +228,26 @@ class AuthController extends Controller
 
     private function renderTreeHtml($user, $children, $isRoot = true)
     {
-        $html = $isRoot ? '<ul class="tree">' : '<ul class="nested">';
+        $html = $isRoot ? '<ul class="tree" style="padding-left:10px; margin:0; font-family:Arial, sans-serif;">' : '<ul class="nested" style="padding-left:10px; margin:6px 0 0 5px; border-left:1px solid #e0e0e0;">';
         // $html = '<ul class="' . ($isRoot ? 'tree' : 'nested') . '">';
 
         $hasChildren = $children->isNotEmpty();
         $icon = $hasChildren ? '➖' : '📁';
 
-        $html .= '<li>';
+        $html .= '<li class="my-1 list-unstyled">';
 
-        $html .= '<span class="tree-node" onclick="toggleNode(this); loadUserDetails(\'' . $user->ulid . '\')">';
-        $html .= '<span class="toggle-icon">' . $icon . '</span>';
-        $html .= '<span class="node-label">' . $user->name . ' (' . $user->ulid . ')|Total_team: ' . $user->total_team . '</span>';
+        $html .= '<span class="tree-node small lh-sm d-flex flex-wrap align-items-center" onclick="toggleNode(this); loadUserDetails(\'' . $user->ulid . '\')">';
+
+        $html .= '<span class="toggle-icon me-1">' . $icon . '</span>';
+
+        $html .= '<span class="node-label fw-medium text-dark">';
+        $html .= $user->name . ' ';
+        $html .= '<span class="text-muted">(' . $user->ulid . ')</span>';
+        $html .= ' | <span class="d-none d-md-inline">Total </span> Team:' . $user->total_team ;
         $html .= '</span>';
+
+        $html .= '</span>';
+
 
         if ($hasChildren) {
             // foreach ($children as $child) {
@@ -359,15 +279,13 @@ class AuthController extends Controller
             'name' => $user->name,
             'ulid' => $user->ulid,
             'email' => $user->email,
-            'address' => $user->address,
-            'profile_picture' => $user->profile_picture,
             'user_doa' => $user->user_doa,
-            'state' => $user->state,
             'rank' => $user->current_rank,
-            'phone' => $user->phone,
             'status' => $user->status,
             'points_balance' => $user->points_balance,
-            'royalty_balance' => $user->royalty_balance,
+            'loyalty_balance' => $user->loyalty_balance,
+            'left_business' => $user->left_business,
+            'right_business' => $user->right_business,
         ]);
     }
 
@@ -407,7 +325,7 @@ class AuthController extends Controller
         // }
 
         // return $output;
-        $html = $isRoot ? '<ul class="tree">' : '<ul class="nested">';
+        $html = $isRoot ? '<ul class="tree" style="padding-left:10px; margin:0; font-family:Arial, sans-serif;">' : '<ul class="nested" style="padding-left:10px; margin:6px 0 0 5px; border-left:1px solid #e0e0e0;">';
 
         foreach ($children as $user) {
             $hasChildren = $user->children->isNotEmpty();
@@ -421,7 +339,11 @@ class AuthController extends Controller
             }
 
             $html .= '<span class="node-label" onclick="loadUserDetails(\'' . $user->ulid . '\')">';
-            $html .= $user->name . ' (' . $user->ulid . ')| Total Team: ' . $user->total_team;
+            $html .= '<span class="fw-medium text-dark">';
+            $html .= $user->name ;
+            $html .= '<span class="text-muted">(' . $user->ulid . ')</span>';
+            $html .= '|<span class="d-none d-md-inline">Total </span>Team:' . $user->total_team ;
+            $html .= '</span>';
             $html .= '</span>';
 
             if ($hasChildren) {
@@ -457,26 +379,7 @@ class AuthController extends Controller
     }
 
 
-    // public function sendEmailOtp(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //     ]);
-
-    //     $otp = rand(100000, 999999);
-
-    //     Session::put('email_otp', $otp);
-    //     Session::put('email_to_verify', $request->email);
-
-    //     Mail::raw("Your OTP is: $otp", function ($message) use ($request) {
-    //         $message->to($request->email)
-    //             ->subject('Your Email Verification OTP');
-    //     });
-
-    //     return response()->json(['status' => true, 'message' => 'OTP sent successfully.']);
-    // }
-
-     public function sendEmailOtp(Request $request)
+    public function sendEmailOtp(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -497,7 +400,7 @@ class AuthController extends Controller
 
     public function showForgotForm()
     {
-        return view('auth.forgot-password');
+        return view('Auth.forgot-password');
     }
 
     public function sendOtp(Request $request)
@@ -525,7 +428,7 @@ class AuthController extends Controller
     public function showResetForm(Request $request)
     {
         $email = session('email');
-        return view('auth.reset-password', compact('email'));
+        return view('Auth.reset-password', compact('email'));
     }
 
 
@@ -553,7 +456,6 @@ class AuthController extends Controller
 
         User::where('email', $request->email)->update([
             'password' => Hash::make($request->password),
-            'password_updated_at' => now(), // ✅ Also update password_updated_at for security checks
         ]);
 
         // Delete OTP after use
@@ -561,5 +463,4 @@ class AuthController extends Controller
 
         return redirect()->route('auth.login')->with('success', 'Password reset successfully');
     }
-
 }

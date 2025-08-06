@@ -15,6 +15,7 @@ class LevelIncome extends Model
         'from_user_name',
         'purchase_amount',
         'level',
+        'rate',
         'percentage',
         'amount',
         'package_id',
