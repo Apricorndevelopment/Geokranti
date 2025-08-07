@@ -21,7 +21,8 @@
                             <tr>
                                 <th style="width: 30px;">#</th>
                                 <th>Name</th>                           
-                                <th>ULID</th>               
+                                <th>ULID</th>   
+                                        
                                 <th>Sponsor</th>
                                 <th>Registered</th>
                                 <th>Status</th>
@@ -32,12 +33,11 @@
                             @foreach ($member as $index => $user)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $user->name }}</td>
-                                   
-                                    <td>{{ $user->ulid ?? '-' }}</td>
-                                    
-                                    <td>{{ $user->sponsor_id ?? '-' }}</td>
-                                    <td>{{ $user->created_at ? $user->created_at->format('d-m-Y') : '-' }}</td>
+                                    <td>{{ $user->name }}</td>                                  
+                                    <td>{{ $user->ulid  }}</td>
+                                                                  
+                                    <td>{{ $user->sponsor_id }}</td>
+                                    <td>{{ $user->created_at }}</td>
                                     <td>
                                         <span class="badge @if ($user->status == 'active') bg-success
                                             @elseif($user->status == 'inactive') bg-secondary
@@ -56,7 +56,7 @@
                                             <form action="{{ route('admin.deletemember', $user->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger px-2" onclick="return confirm('Are you sure?')">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger px-2" onclick="return confirm('Are you sure you want to delete {{$user->name}}({{$user->ulid}}) ?')">
                                                     Delete
                                                 </button>
                                             </form>

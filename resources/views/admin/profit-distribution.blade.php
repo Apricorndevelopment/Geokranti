@@ -42,7 +42,7 @@
                                     <input type="number" step="0.01" class="form-control" id="profit_share" name="profit_share" required>
                                     <label for="profit_share">Profit Share % (for users with profit_share=yes)</label>
                                 </div>
-                                <small class="text-muted">This percentage will be distributed among eligible package buyers</small>
+                                <small class="text-muted" style="font-size: 12px">This percentage will be distributed among eligible package buyers</small>
                             </div>
                             
                             <div class="col-12 mt-3">
@@ -92,6 +92,7 @@
     }
     .form-floating label {
         color: #6c757d;
+        font-size: 14px;
     }
     .table-hover tbody tr:hover {
         background-color: rgba(13, 110, 253, 0.05);

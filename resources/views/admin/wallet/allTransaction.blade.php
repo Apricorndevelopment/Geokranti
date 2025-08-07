@@ -2,15 +2,15 @@
 @section('title', 'Wallet Management')
 @section('container')
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-3">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
+        <div class="card-header bg-primary text-white py-2">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <h5 class="mb-2 mb-md-0">
                     <i class="fas fa-exchange-alt me-2"></i> Points Transactions
                 </h5>
-                <div class="d-flex align-items-center">
-                    <form method="GET" action="{{ route('admin.wallet-transactions') }}" class="me-3">
+                <div class="d-flex flex-column flex-md-row align-items-center w-100 w-md-auto">
+                    <form method="GET" action="{{ route('admin.wallet-transactions') }}" class="w-100 me-md-3 mb-2 mb-md-0">
                         <div class="input-group input-group-sm">
                             <input type="text" name="search" class="form-control" placeholder="Search by ULID..." 
                                    value="{{ request('search') }}">
@@ -24,52 +24,45 @@
                             @endif
                         </div>
                     </form>
-                    <div class="badge bg-white text-primary">
+                    <div class="badge bg-white d-none d-md-block text-primary ms-md-2">
                         Total: {{ $pointsTransactions->total() }}
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="card-body">
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle" style="table-layout: fixed;">
-                    <colgroup>
-                        <col style="width: 12%">
-                        <col style="width: 13%">
-                        <col style="width: 17%">
-                        <col style="width: 10%">
-                        <col style="width: 48%">
-                    </colgroup>
+                <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">Date</th>
+                            <th class="ps-3">Date</th>
                             <th>ULID</th>
-                            <th>User Name</th>
-                            <th>Points</th>
-                            <th class="pe-4">Notes</th>
+                            <th>User</th>
+                            <th class="text-end pe-3">Points</th>
+                            <th>Notes</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($pointsTransactions as $transaction)
                         <tr>
-                            <td class="ps-4">
+                            <td class="ps-3">
                                 {{ $transaction->created_at->format('d M Y') }}
                             </td>
                             <td>
                                 <span class="badge bg-light text-dark">{{ $transaction->user->ulid }}</span>
                             </td>
                             <td>{{ $transaction->user->name }}</td>
-                            <td class="{{ $transaction->points >= 0 ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
+                            <td class="text-end pe-3 {{ $transaction->points >= 0 ? 'text-success fw-bold' : 'text-info fw-bold' }}">
                                 {{ $transaction->points >= 0 ? '+' : '' }}{{ $transaction->points }}
                             </td>
-                            <td class="pe-4 text-wrap">
+                            <td class="text-wrap" style="max-width: 200px; min-width:180px;" title="{{ $transaction->notes ? $transaction->notes : 'N/A' }}">
                                 @if($transaction->notes)
-                                <div style="white-space: normal; word-wrap: break-word;">
+                                   <div style="white-space: normal; word-wrap: break-word;">
                                     {{ $transaction->notes }}
                                 </div>
                                 @else
-                                <span class="text-muted">N/A</span>
+                                    <span class="text-muted">N/A</span>
                                 @endif
                             </td>
                         </tr>
@@ -92,7 +85,7 @@
             </div>
             
             @if($pointsTransactions->hasPages())
-            <div class="d-flex justify-content-center mt-4">
+            <div class="d-flex justify-content-center mt-3">
                 <nav aria-label="Page navigation">
                     <ul class="pagination pagination-sm">
                         {{-- Previous Page Link --}}
@@ -136,4 +129,39 @@
         </div>
     </div>
 </div>
+
+<style>
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table {
+        width: 100%;
+    }
+    
+    .table td, .table th {
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+    
+    .text-truncate {
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    @media (max-width: 768px) {
+        .table td, .table th {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
 @endsection

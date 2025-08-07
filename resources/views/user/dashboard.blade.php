@@ -136,7 +136,8 @@
                 @session('success')
                     <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
                         <i class="fas fa-check-circle me-2"></i>
-                        {{ session('success') }} {{ session('coupon_code') ? ' and You got a Coupon: ' . session('coupon_code') : '' }}
+                        {{ session('success') }}
+                        {{ session('coupon_code') ? ' and You got a Coupon: ' . session('coupon_code') : '' }}
                         <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endsession
@@ -151,17 +152,19 @@
             </div>
         </div>
 
-         @if (Auth::user()->status == 'inactive')
+        @if (Auth::user()->status == 'inactive')
             <!-- Activation Modal -->
-            <div class="modal fade" id="activationModal" tabindex="-1" aria-labelledby="activationModalLabel" aria-hidden="true">
+            <div class="modal fade" id="activationModal" tabindex="-1" aria-labelledby="activationModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header bg-gradient-primary text-white">
                             <h5 class="modal-title" id="activationModalLabel">Activate Your Account</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            @if($packages->isNotEmpty())
+                            @if ($packages->isNotEmpty())
                                 @php $firstPackage = $packages->first(); @endphp
                                 <div class="card mb-3 border-primary">
                                     <div class="card-body">
@@ -174,31 +177,35 @@
                                             <span class="fw-medium">Package Quantity:</span>
                                             <span class="fw-bold">{{ $firstPackage->package_quantity }}</span>
                                         </div>
-                                        @if($firstPackage->discount_per)
+                                        @if ($firstPackage->discount_per)
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span class="fw-medium">Discount Coupon:</span>
                                                 <span class="fw-bold">{{ $firstPackage->discount_per }}%</span>
                                             </div>
                                         @endif
                                         <hr>
-                                        <p class="small text-muted">To activate your account, you need to purchase this starter package.</p>
+                                        <p class="small text-muted">To activate your account, you need to purchase this
+                                            starter package.</p>
                                     </div>
                                 </div>
-                                
+
                                 <form id="activationForm" action="{{ route('user.purchase-package') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="package_id" value="{{ $firstPackage->id }}">
-                                    
+
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <span class="fw-medium">Your Balance:</span>
                                         <span class="badge bg-success rounded-pill px-3">
                                             ₹{{ Auth::user()->points_balance }}
                                         </span>
                                     </div>
-                                    
+
                                     <div class="d-grid">
-                                        <button type="submit" onclick="return confirm('Are you sure you want to purchase package ?')" class="btn btn-success btn-lg">
-                                            <i class="fas fa-shopping-cart me-2"></i> Purchase Package (₹{{ $firstPackage->price }})
+                                        <button type="submit"
+                                            onclick="return confirm('Are you sure you want to purchase package ?')"
+                                            class="btn btn-success btn-lg">
+                                            <i class="fas fa-shopping-cart me-2"></i> Purchase Package
+                                            (₹{{ $firstPackage->price }})
                                         </button>
                                     </div>
                                 </form>
@@ -222,7 +229,8 @@
                         </div>
                         <div class="card-body p-4">
                             <div class="text-center py-3">
-                                <button id="activateBtn" class="btn btn-primary btn-lg px-4 rounded-pill" data-bs-toggle="modal" data-bs-target="#activationModal">
+                                <button id="activateBtn" class="btn btn-primary btn-lg px-4 rounded-pill"
+                                    data-bs-toggle="modal" data-bs-target="#activationModal">
                                     <i class="fas fa-bolt me-2"></i>Activate Account
                                 </button>
                                 <p class="text-muted mt-2">Activate your account to access all features</p>
@@ -236,16 +244,19 @@
         @php
             function formatInLakhsCrores($number)
             {
-                if ($number >= 10000000) {
-                    return number_format($number / 10000000, 2) . ' Cr';
+                if ($number >= 1000000000000) {
+                    return '₹' . number_format($number / 1000000000000, 3) . ' Trillion';
+                } elseif ($number >= 1000000000) {
+                    return '₹' . number_format($number / 1000000000, 2) . ' Billion';
+                } elseif ($number >= 10000000) {
+                    return '₹' . number_format($number / 10000000, 2) . ' Cr';
                 } elseif ($number >= 100000) {
-                    return number_format($number / 100000, 2) . ' Lakh';
+                    return '₹' . number_format($number / 100000, 2) . ' Lakh';
                 } else {
-                    return number_format($number);
+                    return '₹' . number_format($number, 2);
                 }
             }
         @endphp
-
 
         <div class="row">
             <!-- Power Leg Points Card -->
@@ -296,7 +307,7 @@
         document.getElementById('activationForm')?.addEventListener('submit', function(e) {
             const balance = {{ Auth::user()->points_balance }};
             const packagePrice = {{ $packages->isNotEmpty() ? $packages->first()->price : 0 }};
-            
+
             if (balance < packagePrice) {
                 e.preventDefault();
                 alert('Insufficient balance to purchase this package');

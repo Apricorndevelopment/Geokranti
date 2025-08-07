@@ -175,20 +175,32 @@
                                         @if($member->profile_picture)
                                         <img src="{{ asset('storage/'.$member->profile_picture) }}" class="img-thumbnail" style="max-height: 100px;">
                                         @else
-                                        <span class="small">No Profile picture Uploaded</span>
+                                        <p class="small mt-3">No Profile picture Uploaded</p>
                                         @endif
                                     </div>
                                     <div class="col-6 col-md-3 mb-3 text-center">
                                         <label class="form-label text-muted small d-block">Passbook</label>
+                                        @if($member->passbook_photo)
                                         <img src="{{ asset('storage/'.$member->passbook_photo) }}" class="img-thumbnail" style="max-height: 100px;">
+                                        @else
+                                        <p class="small mt-3">No Passbook photo Uploaded</p>
+                                        @endif
                                     </div>
                                     <div class="col-6 col-md-3 mb-3 text-center">
                                         <label class="form-label text-muted small d-block">Aadhar</label>
+                                        @if($member->adhar_photo)
                                         <img src="{{ asset('storage/'.$member->adhar_photo) }}" class="img-thumbnail" style="max-height: 100px;">
+                                        @else
+                                        <p class="small mt-3">No Aadhar Photo Uploaded</p>
+                                        @endif
                                     </div>
                                     <div class="col-6 col-md-3 mb-3 text-center">
                                         <label class="form-label text-muted small d-block">PAN</label>
+                                        @if($member->pan_photo)
                                         <img src="{{ asset('storage/'.$member->pan_photo) }}" class="img-thumbnail" style="max-height: 100px;">
+                                        @else
+                                        <p class="small mt-3">No PAN Card Photo Uploaded</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

@@ -5,26 +5,41 @@
 <style>
     .product-table {
         background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        overflow: hidden;
     }
     .table thead th {
         background-color: #f8f9fa;
-        border-bottom-width: 1px;
+        border-bottom: 2px solid #e9ecef;
         font-weight: 600;
         color: #495057;
+        padding: 1rem;
+    }
+    .table tbody td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f3f5;
     }
     .table-hover tbody tr:hover {
-        background-color: rgba(0, 0, 0, 0.02);
+        background-color: rgba(13, 110, 253, 0.03);
     }
     .action-btns .btn {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.875rem;
-        margin-right: 0.25rem;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 6px;
     }
     .empty-state {
-        background-color: #f8f9fa;
-        border-radius: 8px;
+        padding: 2rem;
+        background-color: #f8fafc;
+    }
+    .empty-state i {
+        font-size: 2.5rem;
+        color: #adb5bd;
     }
     .pagination {
         justify-content: center;
@@ -36,6 +51,8 @@
     }
     .page-link {
         color: #0d6efd;
+        margin: 0 3px;
+        border-radius: 6px !important;
     }
 </style>
 
@@ -43,9 +60,9 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-                <h2 class="mb-0">
+                <h3 class="mb-0">
                     <i class="bi bi-box-seam me-2"></i>Products Management
-                </h2>
+                </h3>
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-circle me-2"></i>Add Product
                 </a>
@@ -54,7 +71,7 @@
     </div>
 
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
         <i class="bi bi-check-circle me-2"></i>
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -67,13 +84,12 @@
                 <table class="table table-hover mb-0">
                     <thead>
                         <tr>
-                            <th width="50">#</th>
+                            <th width="60">#</th>
                             <th>Product Name</th>
                             <th>Price</th>
                             <th>Description</th>
                             <th>Created Date</th>
-                           
-                            <th width="120" class="text-end">Actions</th>
+                            <th width="140" class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,14 +99,13 @@
                             <td>
                                 <strong>{{ $product->product_name }}</strong>
                             </td>
-                            <td>{{ number_format($product->price, 2) }}</td>
+                            <td>₹{{ number_format($product->price, 2) }}</td>
                             <td>
                                 <span class="text-muted" title="{{ $product->description }}">
-                                    {{ Str::limit($product->description, 50) }}
+                                   {{$product->description }}
                                 </span>
                             </td>
                             <td>{{ $product->created_at->format('d M Y') }}</td>
-                          
                             <td class="action-btns text-end">
                                 <a href="{{ route('admin.products.edit', $product->id) }}" 
                                    class="btn btn-sm btn-outline-primary" 
@@ -112,8 +127,8 @@
                         @empty
                         <tr>
                             <td colspan="6" class="text-center py-4 empty-state">
-                                <i class="bi bi-box-open fs-1 text-muted mb-3 d-block"></i>
-                                <h5 class="text-muted">No products found</h5>
+                                <i class="bi bi-box-open"></i>
+                                <h5 class="text-muted mt-2">No products found</h5>
                             </td>
                         </tr>
                         @endforelse

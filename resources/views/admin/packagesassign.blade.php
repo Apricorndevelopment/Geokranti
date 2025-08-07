@@ -2,13 +2,20 @@
 @section('title', 'Package Management')
 @section('container')
 
-
 <div class="container-fluid">
     <div class="card">
         <div class="card-header">
             <h4 class="mt-3">Assign Package</h4>
         </div>
         <div class="card-body">
+             @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show mb-4">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            
             <form action="{{ route('admin.packages.search') }}" method="POST" class="mb-4">
                 @csrf
                 <div class="row">
@@ -24,6 +31,7 @@
                     </div>
                 </div>
             </form>
+
 
             @isset($user)
                 <div class="user-info mb-4 p-3 border rounded">

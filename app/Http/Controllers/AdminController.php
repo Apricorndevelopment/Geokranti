@@ -45,8 +45,9 @@ class AdminController extends Controller
         $package1Count = Package1::count();
         $package2Count = Package2::count();
         $userCount = User::count();
+        $businessCount = Package2Purchase::sum('final_price');
 
-        return view('admin.dashboard', compact('package1Count', 'package2Count', 'userCount'));
+        return view('admin.dashboard', compact('package1Count', 'package2Count', 'userCount','businessCount'));
     }
 
     public function logout(Request $request)

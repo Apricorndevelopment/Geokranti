@@ -10,6 +10,35 @@
                     </div>
 
                     <div class="card-body">
+                        <!-- Referral Link Section -->
+                        <div class="alert alert-info mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong><i class="fas fa-link me-2"></i>Your Referral Link:</strong>
+                                    <span id="referralLink">{{ url('/register') }}?sponsor_id={{ $user->ulid }}</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="copyReferralLink()">
+                                    <i class="fas fa-copy me-1"></i> Copy
+                                </button>
+                            </div>
+
+                            <div class="share-buttons">
+                                <strong class="d-block mb-2"><i class="fas fa-share-alt me-2"></i>Share Referral Link
+                                    via:</strong>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-success" onclick="shareOnWhatsApp()">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="shareOnFacebook()">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" onclick="shareOnTelegram()">
+                                        <i class="fab fa-telegram"></i> Telegram
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Tab Navigation -->
                         <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -241,6 +270,69 @@
             padding: 20px 0;
         }
     </style>
+
+    <script>
+        function copyReferralLink() {
+            // Get the referral link text
+            const referralLink = document.getElementById('referralLink').innerText;
+
+            // Create a temporary textarea element
+            const textarea = document.createElement('textarea');
+            textarea.value = referralLink;
+            textarea.style.position = 'fixed'; // Prevent scrolling to bottom
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+                // Execute the copy command
+                const successful = document.execCommand('copy');
+
+                // Get the button that was clicked
+                const button = event.target.tagName === 'BUTTON' ? event.target : event.target.closest('button');
+
+                if (successful) {
+                    // Show success message
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                    button.classList.remove('btn-outline-primary');
+                    button.classList.add('btn-success');
+
+                    // Revert after 2 seconds
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('btn-success');
+                        button.classList.add('btn-outline-primary');
+                    }, 2000);
+                } else {
+                    alert('Failed to copy referral link. Please try again.');
+                }
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy referral link. Please try again.');
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function shareOnWhatsApp() {
+            const referralLink = document.getElementById('referralLink').innerText;
+            const message = `Join me on this platform! Use my referral link: ${referralLink}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function shareOnFacebook() {
+            const referralLink = document.getElementById('referralLink').innerText;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`, '_blank');
+        }
+
+        function shareOnTelegram() {
+            const referralLink = document.getElementById('referralLink').innerText;
+            const message = `Join me on this platform! Use my referral link: ${referralLink}`;
+            window.open(
+                `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(message)}`,
+                '_blank');
+        }
+    </script>
 
     <!-- Bootstrap JS for tabs -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

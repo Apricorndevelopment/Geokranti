@@ -13,18 +13,29 @@
     <link rel="stylesheet" href="{{ asset('assets2/vendors/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets2/vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-    <!-- <link rel="stylesheet" href="{{ asset('assets2/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('assets2/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets2/js/select.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets2/css/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets2/images/favicon.png') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        .sub-menu,
+        .sub-menu li,
+        .sub-menu li::before,
+        .sub-menu li::after {
+            list-style: none !important;
+            content: none !important;
+            margin: 0 !important;
+        }
+    </style>
 </head>
 
 <body>
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 fixed-top d-flex flex-row py-0">
-        <div class="text-center navbar-brand-wrapper ps-0 ps-sm-1 ps-xl-2 d-flex align-items-center justify-content-start">
+        <div
+            class="text-center navbar-brand-wrapper ps-0 ps-sm-1 ps-xl-2 d-flex align-items-center justify-content-start">
             <a class="navbar-brand brand-logo me-5 d-flex align-items-center" href="">
                 <img src="{{ asset('geokrantilogo.jpg') }}" alt="logo"
                     style="width: 55px; height: 55px; object-fit: cover;" class="me-2" />
@@ -175,21 +186,20 @@
                         <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables3">
-                        <ul class="nav flex-column sub-menu ps-4"
-                            style="border-left: 2px solid #4b49ac; list-style: none;">
-                            <li class="nav-item">
+                        <ul class="nav flex-column sub-menu ps-3"
+                            style="border-left: 2px solid #4b49ac; list-style:none;">
+                            <li class="nav-item" style="list-style: none;">
                                 <a class="nav-link d-flex align-items-center" href="{{ route('admin.stock.form') }}">
                                     <i class="fa fa-truck me-2" style="font-size: 0.8rem;"></i>
                                     <span>Transfer Stock</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" style="list-style: none;">
                                 <a class="nav-link d-flex align-items-center" href="{{ route('admin.viewStock') }}">
                                     <i class="fa fa-credit-card me-2" style="font-size: 0.8rem;"></i>
                                     <span>View User's Stock</span>
                                 </a>
                             </li>
-                           
                         </ul>
                     </div>
                 </li>
@@ -201,7 +211,7 @@
                         <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables2">
-                        <ul class="nav flex-column sub-menu ps-4"
+                        <ul class="nav flex-column sub-menu ps-3"
                             style="border-left: 2px solid #4b49ac; list-style: none;">
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" href="{{ route('admin.wallet') }}">
@@ -235,15 +245,15 @@
                         <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables">
-                        <ul class="nav flex-column sub-menu ps-4"
+                        <ul class="nav flex-column sub-menu ps-3"
                             style="border-left: 2px solid #4b49ac; list-style: none;">
-                            <li class="nav-item">
+                            <li class="nav-item m-0 p-0">
                                 <a class="nav-link d-flex align-items-center" href="{{ route('admin.package') }}">
                                     <i class="fa fa-eye me-2" style="font-size: 0.8rem;"></i>
                                     <span>View Packages</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item m-0 p-0">
                                 <a class="nav-link d-flex align-items-center"
                                     href="{{ route('admin.packages.assign') }}">
                                     <i class="fa fa-check-circle me-2" style="font-size: 0.8rem;"></i>
@@ -262,30 +272,30 @@
                         <i class="menu-arrow fa fa-angle-down transition-all"></i>
                     </a>
                     <div class="collapse" id="tables1">
-                        <ul class="nav flex-column sub-menu ps-4"
-                            style="border-left: 2px solid #4b49ac; list-style: none;">
-                            <li class="nav-item" style="list-style: none; ">
-                                <a class="nav-link d-flex align-items-center"
+                        <ul class="nav flex-column sub-menu ps-3" style="border-left: 2px solid #4b49ac;">
+                            <li class="nav-item list-unstyled m-0 p-0">
+                                <a class="nav-link d-flex align-items-center py-2"
                                     href="{{ route('admin.profit.distribution') }}">
                                     <i class="fa fa-share-alt me-2" style="font-size: 0.8rem;"></i>
                                     <span>Distribute Profit</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center"
+                            <li class="nav-item list-unstyled m-0 p-0">
+                                <a class="nav-link d-flex align-items-center py-2"
                                     href="{{ route('admin.view.monthlyDistribution') }}">
                                     <i class="fa fa-calendar me-2" style="font-size: 0.8rem;"></i>
                                     <span>Monthly Profit</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center"
+                            <li class="nav-item list-unstyled m-0 p-0">
+                                <a class="nav-link d-flex align-items-center py-2"
                                     href="{{ route('admin.view.distribution') }}">
                                     <i class="fa fa-calendar-check-o me-2" style="font-size: 0.8rem;"></i>
                                     <span>Yearly Profit</span>
                                 </a>
                             </li>
                         </ul>
+
                     </div>
                 </li>
             </ul>
@@ -312,7 +322,7 @@
     <script src="{{ asset('assets2/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets2/js/dashboard.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
 
 </body>
 
